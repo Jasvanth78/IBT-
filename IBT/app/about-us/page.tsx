@@ -205,7 +205,7 @@ export default function AboutPage() {
               {/* BUTTONS */}
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
-                  href="/contact"
+                  href="/contact-us"
                   className="flex w-full sm:w-auto h-12 items-center justify-center rounded-lg bg-[#e63946] px-6 text-sm font-semibold text-white transition hover:bg-[#d62839] shadow-md shadow-red-500/10"
                 >
                   Work With Us <FiArrowRight className="ml-2" />
@@ -517,7 +517,7 @@ export default function AboutPage() {
               {members.length > 0 ? (
                 <>
                   <div className="px-4 sm:px-12 w-full">
-                    <div className="relative group/slider flex items-center w-full">
+                     <div className="relative group/slider flex items-center w-full">
                       <button
                         onClick={scrollLeft}
                         disabled={!canScrollLeft}
@@ -646,12 +646,17 @@ export default function AboutPage() {
           <div className="absolute left-0 bottom-0 opacity-20 pointer-events-none">
             <FiSend size={180} className="text-white transform -rotate-12 translate-y-12 -translate-x-6" />
           </div>
-          <div className="relative z-10">
+          <div className="relative z-10 text-center sm:text-left">
             <h3 className="text-xl font-extrabold !text-white sm:text-2xl">Ready to work with us?</h3>
-            <p className="text-xs text-slate-200 mt-1">Let's build something amazing together.</p>
+            <p 
+              className="text-xs text-slate-200 mt-1"
+              style={{ textAlign: 'inherit' }}
+            >
+              Let's build something amazing together.
+            </p>
           </div>
           <Link
-            href="/contact"
+            href="/contact-us"
             className="relative z-10 bg-white text-[#0f172a] rounded-lg px-6 py-3.5 text-xs font-bold shadow-sm hover:bg-slate-50 transition shrink-0 flex items-center gap-2 w-full sm:w-auto justify-center"
           >
             Schedule a Free Consultation <FiArrowRight />

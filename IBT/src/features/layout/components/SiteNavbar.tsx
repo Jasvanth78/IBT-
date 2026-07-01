@@ -9,11 +9,12 @@ import { SiteButton } from '@/src/shared/ui';
 
 const navItems = [
   { href: '/', label: 'Home' },
-  { href: '/about', label: 'About Us' },
+  { href: '/about-us', label: 'About Us' },
   { href: '/services', label: 'Services' },
   { href: '/internship', label: 'Internship' },
   { href: '/ibt-labs', label: 'IBT Labs' },
-  { href: '/contact', label: 'Contact Us' },
+
+  { href: '/contact-us', label: 'Contact Us' }
 
 ];
 
@@ -99,7 +100,7 @@ export function SiteNavbar() {
 
           <div className="hidden items-center gap-4 lg:flex">
             <SiteButton
-              href="/contact"
+              href="/contact-us"
               className="bg-[#e63946] hover:bg-[#c1121f] text-white rounded-md px-6 py-2.5 text-[14px] font-bold transition-all shadow-md"
               rightIcon={<FiArrowRight size={16} />}
             >
@@ -183,7 +184,7 @@ export function SiteNavbar() {
           </div>
 
           <div className="sticky bottom-0 mt-auto -mx-4 border-t border-(--ui-border) bg-white px-4 pb-8 pt-4 sm:pb-4">
-            <SiteButton href="/contact" variant="primary" size="md" fullWidth>
+            <SiteButton href="/contact-us" variant="primary" size="md" fullWidth>
               Get In Touch
             </SiteButton>
           </div>

@@ -61,7 +61,7 @@ const blogImageUrlSchema = z
 const blogContentSchema = z
   .string("Blog content is required")
   .min(1, "Blog content is required")
-  .max(50000, "Blog content must be at most 50000 characters long");
+  .max(5000000, "Blog content must be at most 5000000 characters long");
 
 const validatePublishRules = (
   data: {

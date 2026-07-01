@@ -57,7 +57,7 @@ export default async function ContactPage(_: Props) {
               </span>
               <h1 className="mt-3 text-[24px] sm:text-[28px] lg:text-[40px] font-black tracking-tight text-[#0f172a] leading-[1.1]">
                 Let's build
-                something <span className='text-red-600'>impactful
+                something <span className='text-red-600'>Impactful
                   together</span>
               </h1>
               <p className="pt-4 text-sm text-[#475569] leading-relaxed font-medium">
@@ -68,47 +68,47 @@ export default async function ContactPage(_: Props) {
             {/* DIRECT CHANNELS CARDS */}
             <div className="space-y-4 w-full">
               {/* EMAIL HUB */}
-              <div className="flex items-start gap-4 bg-[#f8fafc] border border-slate-100 rounded-2xl p-5 hover:shadow-md transition duration-200">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-[#e63946] border border-rose-100/40">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex items-start gap-2 sm:gap-4 bg-[#f8fafc] border border-slate-100 rounded-2xl p-3 sm:p-5 hover:shadow-md transition duration-200">
+                <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-[#e63946] border border-rose-100/40">
+                  <svg className="h-4.5 w-4.5 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide">Email Us</h3>
-                  <p className="text-sm font-bold text-[#0f172a] mt-0.5">info@ibacustech.com</p>
-                  <p className="text-xs text-slate-400 font-medium mt-1">We reply within 24 hours</p>
+                  <h3 className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wide">Email Us</h3>
+                  <p className="text-xs sm:text-sm font-bold text-[#0f172a] mt-0.5">info@ibacustech.com</p>
+                  <p className="text-[10px] sm:text-xs text-slate-400 font-medium mt-1">We reply within 24 hours</p>
                 </div>
               </div>
 
               {/* CALL HUB */}
-              <div className="flex items-start gap-4 bg-[#f8fafc] border border-slate-100 rounded-2xl p-5 hover:shadow-md transition duration-200">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-100/40">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex items-start gap-2 sm:gap-4 bg-[#f8fafc] border border-slate-100 rounded-2xl p-3 sm:p-5 hover:shadow-md transition duration-200">
+                <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-100/40">
+                  <svg className="h-4.5 w-4.5 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide">Call Us</h3>
-                  <p className="text-sm font-bold text-[#0f172a] mt-0.5">+91 9003562715</p>
-                  <p className="text-xs text-slate-400 font-medium mt-1">Mon – Fri | 10:00 AM – 06:00 PM</p>
+                  <h3 className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wide">Call Us</h3>
+                  <p className="text-xs sm:text-sm font-bold text-[#0f172a] mt-0.5 pl-2">+91 9003562715</p>
+                  <p className="text-[9px] min-[360px]:text-[10px] sm:text-xs text-slate-400 font-medium mt-1 whitespace-nowrap">Mon – Fri | 10:00 AM – 06:00 PM</p>
                 </div>
               </div>
 
               {/* LOCATION HUB */}
-              <div className="flex items-start gap-4 bg-[#f8fafc] border border-slate-100 rounded-2xl p-5 hover:shadow-md transition duration-200">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100/40">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex items-start gap-2 sm:gap-4 bg-[#f8fafc] border border-slate-100 rounded-2xl p-3 sm:p-5 hover:shadow-md transition duration-200">
+                <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100/40">
+                  <svg className="h-4.5 w-4.5 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wide">Visit Us</h3>
-                  <p className="text-sm font-bold text-[#0f172a] mt-0.5 leading-snug">
+                  <h3 className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wide">Visit Us</h3>
+                  <p className="text-xs sm:text-sm font-bold text-[#0f172a] mt-0.5 leading-snug">
                     I-BACUS-TECH, 3rd Floor,<br /> 6C, Chitra Nagar, Saravanampatti, <br />Coimbatore - 641035.
                   </p>
-                  <p className="text-xs text-slate-400 font-medium mt-1">We'd love to meet you!</p>
+                  <p className="text-[10px] sm:text-xs text-slate-400 font-medium mt-1">We'd love to meet you!</p>
                 </div>
               </div>
             </div>
@@ -225,8 +225,6 @@ export default async function ContactPage(_: Props) {
                 <button className="text-[10px] font-bold text-blue-600 mt-2 block hover:underline"></button>
               </div>
 
-
-
               {/* Central Pin Anchor */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-10">
                 <div className="h-4 w-4 bg-[#e63946] rounded-full animate-ping absolute opacity-45" />
@@ -242,12 +240,17 @@ export default async function ContactPage(_: Props) {
         ===================================================== */}
         <div className="mt-20 bg-[#0a1128] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(230,57,70,0.12),transparent_60%)] pointer-events-none" />
-          <div className="relative z-10">
-            <h3 className="text-xl font-extrabold !text-white sm:text-2xl tracking-tight">Ready to start your next project?</h3>
-            <p className="text-xs text-slate-400 mt-1 font-medium">Let's discuss how we can turn your ideas into reality.</p>
+          <div className="relative z-10 text-center sm:text-left w-full sm:w-auto">
+            <h3 className="text-xl font-extrabold !text-white sm:text-2xl tracking-tight text-center sm:text-left">Ready to start your next project?</h3>
+            <p 
+              className="text-xs text-slate-400 pt-6 font-medium text-center sm:text-left"
+              style={{ textAlign: 'inherit' }}
+            >
+              Let's discuss how we can turn your ideas into reality.
+            </p>
           </div>
           <a
-            href="/contact"
+            href="/contact-us"
             className="relative z-10 bg-white text-[#0a1128] rounded-xl px-6 py-3 text-xs font-bold shadow-sm hover:bg-slate-50 transition shrink-0 tracking-wide flex items-center justify-center gap-1.5 text-center"
           >
             <span>Schedule a Free Consultation</span>

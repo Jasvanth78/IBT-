@@ -158,22 +158,6 @@ export function AllServicesPage() {
   const processTitle = settings?.servicesProcessTitle || "How We Deliver Excellence";
   const processBadge = settings?.servicesProcessBadge || "HOW WE DELIVER";
 
-  // Carousel logic for Solution Portfolio
-  const [carouselIndex, setCarouselIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(4);
-
-  useEffect(() => {
-    const updateVisible = () => {
-      const w = window.innerWidth;
-      if (w >= 1024) setVisibleCount(4);
-      else if (w >= 640) setVisibleCount(2);
-      else setVisibleCount(1);
-    };
-    updateVisible();
-    window.addEventListener('resize', updateVisible);
-    return () => window.removeEventListener('resize', updateVisible);
-  }, []);
-
   const fallbackServices = [
     {
       id: "1",
@@ -211,12 +195,35 @@ export function AllServicesPage() {
 
   const displayServices = services.length > 0 ? services : fallbackServices;
 
-  const showPrev = () => {
-    setCarouselIndex((prev) => Math.max(0, prev - 1));
+  // Carousel logic for All Services offerings grid
+  const [allServicesCarouselIndex, setAllServicesCarouselIndex] = useState(0);
+  const [allServicesVisibleCount, setAllServicesVisibleCount] = useState(3);
+
+  useEffect(() => {
+    const updateVisibleAllServices = () => {
+      const w = window.innerWidth;
+      if (w >= 1024) setAllServicesVisibleCount(3);
+      else if (w >= 640) setAllServicesVisibleCount(2);
+      else setAllServicesVisibleCount(1);
+    };
+    updateVisibleAllServices();
+    window.addEventListener('resize', updateVisibleAllServices);
+    return () => window.removeEventListener('resize', updateVisibleAllServices);
+  }, []);
+
+  const showPrevAllServices = () => {
+    setAllServicesCarouselIndex((prev) => Math.max(0, prev - 1));
   };
-  const showNext = () => {
-    setCarouselIndex((prev) => Math.min(displayServices.length - visibleCount, prev + 1));
+  const showNextAllServices = () => {
+    setAllServicesCarouselIndex((prev) => Math.min(displayServices.length - allServicesVisibleCount, prev + 1));
   };
+
+  useEffect(() => {
+    setAllServicesCarouselIndex((prev) => {
+      const maxIdx = Math.max(0, displayServices.length - allServicesVisibleCount);
+      return Math.min(prev, maxIdx);
+    });
+  }, [allServicesVisibleCount, displayServices.length]);
 
   /* =========================================================
      MAIN RENDER
@@ -274,7 +281,7 @@ export function AllServicesPage() {
               </div>
 
               <Link
-                href="/contact"
+                href="#all-services"
                 className="w-full sm:w-auto inline-flex h-14 px-8 bg-[#e63946] text-white rounded-md items-center justify-center text-[14px] font-bold hover:bg-[#c1121f] transition-all shadow-xl shadow-red-500/20"
               >
                 Explore Our Services <FiArrowRight className="ml-2" />
@@ -294,7 +301,7 @@ export function AllServicesPage() {
               {/* Floating Badge */}
               <div className="absolute -bottom-6 left-4 sm:-bottom-8 sm:left-8 bg-white py-4 px-6 sm:py-6 sm:px-8 rounded-xl shadow-2xl border border-slate-100 flex items-center gap-3 sm:gap-4">
                 <div>
-                  <div className="text-[28px] sm:text-[36px] font-black text-[#0f172a] leading-none mb-1">200+</div>
+                  <div className="text-[28px] sm:text-[36px] font-black text-[#0f172a] leading-none mb-1">250+</div>
                   <div className="text-[11px] sm:text-[13px] font-bold text-slate-500">Projects Completed</div>
                 </div>
                 <FiTrendingUp className="text-[#e63946] text-2xl sm:text-3xl" />
@@ -383,6 +390,132 @@ export function AllServicesPage() {
 
 
       {/* =====================================================
+          2.5 ALL SERVICES GRID
+      ===================================================== */}
+      <section id="all-services" className="py-12 lg:py-16 bg-white border-t border-slate-100 scroll-mt-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h3 className="text-[18px] font-bold uppercase tracking-widest !text-red-500 mb-3">
+              OUR SERVICES
+            </h3>
+            <h2 className="mb-6 font-extrabold tracking-tight text-[#0f172a] text-3xl sm:text-4xl">
+              Innovative Solutions for Modern Challenges
+            </h2>
+            <div className="w-full flex justify-center">
+              <p className="max-w-2xl text-center text-lg text-slate-500 font-medium leading-relaxed">
+                Explore our full range of professional services, tailored to help your business innovate, scale, and succeed.
+              </p>
+            </div>
+          </div>
+
+          <div className="relative px-8 sm:px-12 lg:px-16">
+            {/* Arrows */}
+            {displayServices.length > allServicesVisibleCount && (
+              <>
+                <button
+                  onClick={showPrevAllServices}
+                  disabled={allServicesCarouselIndex <= 0}
+                  className={`absolute top-[40%] -translate-y-1/2 -left-2 sm:left-0 lg:left-2 z-20 w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-md transition-colors ${allServicesCarouselIndex <= 0 ? 'opacity-30 cursor-not-allowed text-slate-300' : 'text-slate-600 hover:bg-slate-50'
+                    }`}
+                >
+                  <FiChevronLeft />
+                </button>
+                <button
+                  onClick={showNextAllServices}
+                  disabled={allServicesCarouselIndex >= displayServices.length - allServicesVisibleCount}
+                  className={`absolute top-[40%] -translate-y-1/2 -right-2 sm:right-0 lg:right-2 z-20 w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-md transition-colors ${allServicesCarouselIndex >= displayServices.length - allServicesVisibleCount ? 'opacity-30 cursor-not-allowed text-slate-300' : 'text-slate-600 hover:bg-slate-50'
+                    }`}
+                >
+                  <FiChevronRight />
+                </button>
+              </>
+            )}
+
+            {/* Carousel Track */}
+            <div className="overflow-hidden py-4 -my-4">
+              <motion.div
+                className="flex transition-transform duration-500 ease-out"
+                style={{
+                  width: `${(displayServices.length * 100) / allServicesVisibleCount}%`,
+                  transform: `translateX(-${(allServicesCarouselIndex * 100) / displayServices.length}%)`,
+                }}
+              >
+                {displayServices.map((service, idx) => {
+                  const cardColors = [
+                    { bg: 'bg-blue-50', text: 'text-blue-600', hoverBg: 'hover:border-blue-200' },
+                    { bg: 'bg-rose-50', text: 'text-rose-500', hoverBg: 'hover:border-rose-200' },
+                    { bg: 'bg-emerald-50', text: 'text-emerald-500', hoverBg: 'hover:border-emerald-200' },
+                    { bg: 'bg-purple-50', text: 'text-[#9333ea]', hoverBg: 'hover:border-purple-200' },
+                    { bg: 'bg-orange-50', text: 'text-orange-500', hoverBg: 'hover:border-orange-200' },
+                    { bg: 'bg-sky-50', text: 'text-sky-500', hoverBg: 'hover:border-sky-200' },
+                  ];
+                  const colorSet = cardColors[idx % cardColors.length];
+
+                  return (
+                    <div
+                      key={service.id || idx}
+                      className="px-3 text-left"
+                      style={{ flex: `0 0 ${100 / displayServices.length}%` }}
+                    >
+                      <Link
+                        href={`/services/${service.slug}`}
+                        className="group block h-full"
+                      >
+                        <div className={`flex h-full flex-col overflow-hidden rounded-2xl bg-white border border-slate-100 p-8 text-left hover:shadow-[0_15px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 ${colorSet.hoverBg}`}>
+
+                          {/* Visual container (Image or styled icon placeholder) */}
+                          <div className="relative overflow-hidden rounded-xl mb-6 aspect-video bg-slate-50 border border-slate-100/50 flex items-center justify-center">
+                            {service.imageUrl ? (
+                              <img
+                                src={resolveImageUrl(service.imageUrl)}
+                                alt={service.title}
+                                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700"
+                              />
+                            ) : (
+                              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${colorSet.bg} ${colorSet.text}`}>
+                                <FiBriefcase size={28} />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Tags */}
+                          {service.tags && service.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-4">
+                              {service.tags.map((tag, tagIdx) => (
+                                <span
+                                  key={tagIdx}
+                                  className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${colorSet.bg} ${colorSet.text}`}
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          <h3 className="text-xl font-bold text-[#0f172a] mb-3 leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">
+                            {service.title}
+                          </h3>
+
+                          <p className="text-[13px] leading-relaxed text-slate-500 mb-6 flex-1 line-clamp-3">
+                            {service.description || "Customized technology solutions designed to streamline operations and enhance productivity."}
+                          </p>
+
+                          <div className={`mt-auto flex items-center gap-1.5 text-sm font-bold ${colorSet.text}`}>
+                            Learn More <FiArrowRight size={14} className="transform group-hover:translate-x-1 transition-transform" />
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  );
+                })}
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* =====================================================
           3. HOW WE DELIVER EXCELLENCE (Process Timeline)
       ===================================================== */}
       <section className="py-12 lg:py-16 bg-white">
@@ -432,93 +565,6 @@ export function AllServicesPage() {
 
 
       {/* =====================================================
-          4. SOLUTION PORTFOLIO
-      ===================================================== */}
-      <section className="py-12 lg:py-16 bg-white border-t border-slate-100">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center relative">
-          <h3 className="text-[18px] font-bold uppercase tracking-widest !text-red-500 mb-4">
-            SOLUTION PORTFOLIO
-          </h3>
-          <h2 className="mb-6 font-extrabold tracking-tight text-[#0f172a]">
-            Solution Portfolio
-          </h2>
-          <div className="w-full flex justify-center mb-10 sm:mb-16">
-            <p className="max-w-2xl text-center text-lg text-slate-500 font-medium leading-relaxed m-0">
-              Explore some of the impactful solutions we have built for our clients across diverse industries.
-            </p>
-          </div>
-
-          <div className="relative px-8 sm:px-12 lg:px-16">
-            {/* Arrows */}
-            {displayServices.length > visibleCount && (
-              <>
-                <button
-                  onClick={showPrev}
-                  disabled={carouselIndex <= 0}
-                  className={`absolute top-[40%] -translate-y-1/2 -left-2 sm:left-0 lg:left-2 z-20 w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-md transition-colors ${carouselIndex <= 0 ? 'opacity-30 cursor-not-allowed text-slate-300' : 'text-slate-600 hover:bg-slate-50'
-                    }`}
-                >
-                  <FiChevronLeft />
-                </button>
-                <button
-                  onClick={showNext}
-                  disabled={carouselIndex >= displayServices.length - visibleCount}
-                  className={`absolute top-[40%] -translate-y-1/2 -right-2 sm:right-0 lg:right-2 z-20 w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-md transition-colors ${carouselIndex >= displayServices.length - visibleCount ? 'opacity-30 cursor-not-allowed text-slate-300' : 'text-slate-600 hover:bg-slate-50'
-                    }`}
-                >
-                  <FiChevronRight />
-                </button>
-              </>
-            )}
-
-            {/* Carousel Track */}
-            <div className="overflow-hidden">
-              <motion.div
-                className="flex transition-transform duration-500 ease-out"
-                style={{
-                  width: `${(displayServices.length * 100) / visibleCount}%`,
-                  transform: `translateX(-${(carouselIndex * 100) / displayServices.length}%)`,
-                }}
-              >
-                {displayServices.map((service, idx) => (
-                  <div
-                    key={service.id || idx}
-                    className="px-3 text-left"
-                    style={{ flex: `0 0 ${100 / displayServices.length}%` }}
-                  >
-                    <Link
-                      href={service.projectUrl || `/services/${service.slug}`}
-                      target={service.projectUrl ? "_blank" : undefined}
-                      rel={service.projectUrl ? "noopener noreferrer" : undefined}
-                      className="group block cursor-pointer"
-                    >
-                      <div className="overflow-hidden rounded-2xl mb-5 shadow-sm border border-slate-100 aspect-video bg-slate-50">
-                        <img
-                          src={resolveImageUrl(service.imageUrl)}
-                          alt={service.title}
-                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700"
-                        />
-                      </div>
-                      <h4 className="text-[16px] font-bold text-[#0f172a] mb-1 group-hover:text-blue-600 transition-colors line-clamp-1">
-                        {service.title}
-                      </h4>
-                      <p className="text-[13px] text-slate-500 font-medium mb-3 line-clamp-1">
-                        {service.tags && service.tags.length > 0 ? service.tags.join(', ') : 'Service'}
-                      </p>
-                      <div className="text-[13px] font-bold text-[#e63946] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                        {service.projectUrl ? 'Visit Website' : 'View Case Study'} <FiArrowRight />
-                      </div>
-                    </Link>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      {/* =====================================================
           5. LET'S TALK
       ===================================================== */}
       <section className="py-12 lg:py-16 bg-slate-50 overflow-hidden">
@@ -549,10 +595,10 @@ export function AllServicesPage() {
                 Let's Build Something Remarkable Together
               </h2>
               <p className="text-lg text-slate-500 font-medium leading-relaxed mb-10 max-w-none lg:max-w-lg">
-                From startups to enterprises, we help businesses leverage technology to achieve more. Partner with IBACUS TECH and create solutions that make an impact.
+                From startups to enterprises, we help businesses leverage technology to achieve more. Partner with I BACUS TECH and create solutions that make an impact.
               </p>
               <Link
-                href="/contact"
+                href="/contact-us"
                 className="w-full sm:w-auto inline-flex h-14 px-8 bg-[#0055ff] text-white rounded-md items-center justify-center text-[14px] font-bold hover:bg-[#0044cc] transition-all shadow-xl shadow-blue-500/20"
               >
                 Schedule a Consultation <FiArrowRight className="ml-2" />
@@ -610,7 +656,7 @@ export function AllServicesPage() {
               {/* Button */}
               <div className="text-center md:text-right z-10">
                 <SiteButton
-                  href="/contact"
+                  href="/contact-us"
                   className="bg-white !text-slate-900 rounded-[6px] px-8 py-3 font-bold text-[14px] hover:bg-slate-50 transition-colors shadow-xl whitespace-nowrap"
                 >
                   Get a Free Quote <FiArrowRight className="inline-block ml-2" />

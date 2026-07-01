@@ -82,7 +82,7 @@ export default async function BlogPage() {
 
             {/* Left Content */}
             <div className="relative z-10">
-              <h3 className="text-[28px]font-bold uppercase tracking-[0.2em] !text-red-600 mb-4">
+              <h3 className="text-[28px] font-bold uppercase tracking-[0.2em] !text-red-600 mb-4">
                 IBT BLOG
               </h3>
 
@@ -92,7 +92,7 @@ export default async function BlogPage() {
               </h1>
 
               <p className="text-[15px] text-slate-500 font-medium leading-relaxed mb-10 max-w-md md:max-w-none lg:max-w-md">
-                Explore expert perspectives, technical guides, industry trends, and innovation stories from the IBACUS TECH team.
+                Explore expert perspectives, technical guides, industry trends, and innovation stories from the I BACUS TECH team.
               </p>
 
               {/* Stats Block */}

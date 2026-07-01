@@ -70,7 +70,7 @@ export function StrategySection() {
             
             <div className="flex justify-center lg:justify-start">
               <SiteButton 
-                href="/about" 
+                href="/about-us" 
                 variant="primary" 
                 className="bg-[#e63946] hover:bg-[#c1121f] text-white rounded-full px-7 py-3 text-sm font-bold transition-all shadow-md shadow-red-100"
               >

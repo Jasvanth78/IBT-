@@ -42,7 +42,10 @@ import {
 ========================================================= */
 const cleanHtml = (html: string) => {
   if (!html) return '';
-  return html.replace(/&nbsp;/g, ' ').replace(/\u00a0/g, ' ');
+  return html
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\u00a0/g, ' ')
+    .replace(/style="[^"]*color\s*:\s*[^"]*"/gi, '');
 };
 
 /* =========================================================
@@ -246,45 +249,54 @@ export function AllLabsPage() {
   // Lab Initiatives
   const initiatives = useMemo(() => {
     const raw = settings['labs_initiatives'];
-    if (Array.isArray(raw) && raw.length > 0) return raw;
-    if (typeof raw === 'string') {
+    let items: any[] = [];
+    if (Array.isArray(raw) && raw.length > 0) {
+      items = raw;
+    } else if (typeof raw === 'string') {
       try {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) items = parsed;
       } catch { }
     }
-    return [
-      {
-        id: 'init1',
-        badge: 'ACTIVE RESEARCH',
-        title: 'Next-Gen Robotics.',
-        description: 'Developing autonomous systems for precision manufacturing and hazardous environment exploration.',
-        imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000',
-        link: '/services',
-        btnText: '',
-        layout: 'dark-large'
-      },
-      {
-        id: 'init2',
-        badge: '',
-        title: 'Practice Log',
-        description: 'The ultimate tool to track your skills.',
-        imageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600',
-        link: 'https://practice-skill-log.vercel.app/login',
-        btnText: 'Visit',
-        layout: 'light-row'
-      },
-      {
-        id: 'init3',
-        badge: '',
-        title: 'Join the Lab Ecosystem',
-        description: 'Collaborate with industry veterans on real-world challenges that define the next decade.',
-        imageUrl: '',
-        link: '',
-        btnText: 'Submit Portfolio',
-        layout: 'gradient-cta'
-      }
-    ];
+    if (items.length === 0) {
+      items = [
+        {
+          id: 'init1',
+          badge: 'ACTIVE RESEARCH',
+          title: 'Next-Gen Robotics.',
+          description: 'Developing autonomous systems for precision manufacturing and hazardous environment exploration.',
+          imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000',
+          link: '/services',
+          btnText: '',
+          layout: 'dark-large'
+        },
+        {
+          id: 'init2',
+          badge: '',
+          title: 'Practice Log',
+          description: 'The ultimate tool to track your skills.',
+          imageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600',
+          link: 'https://practice-skill-log.vercel.app/login',
+          btnText: 'Visit',
+          layout: 'light-row'
+        },
+        {
+          id: 'init3',
+          badge: '',
+          title: 'Join the Lab Ecosystem',
+          description: 'Collaborate with industry veterans on real-world challenges that define the next decade.',
+          imageUrl: '',
+          link: '',
+          btnText: 'Submit Portfolio',
+          layout: 'gradient-cta'
+        }
+      ];
+    }
+    return items.map((item: any) => ({
+      ...item,
+      title: cleanHtml(item.title || ''),
+      description: cleanHtml(item.description || '')
+    }));
   }, [settings]);
 
   const largeCards = useMemo(() => initiatives.filter((c: any) => c.layout === 'dark-large'), [initiatives]);
@@ -328,7 +340,7 @@ export function AllLabsPage() {
   const heroImageUrl = settings['labs_hero_image_url'] || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200';
   const rawHeroBtnText = settings['labs_hero_btn1_text'];
   const heroBtnText = (!rawHeroBtnText || rawHeroBtnText.trim() === '' || rawHeroBtnText.trim() === 'Collaborate')
-    ? 'Apply Now'
+    ? 'Join our Lab'
     : cleanHtml(rawHeroBtnText);
 
   // CTA Section
@@ -372,12 +384,12 @@ export function AllLabsPage() {
             <div className="relative z-10 max-w-none lg:max-w-xl">
 
 
-              <h1 
+              <h1
                 className="text-[24px] sm:text-[28px] lg:text-[40px] font-black text-[#0f172a] leading-[1.05] tracking-tight mb-6 md:[&_br]:hidden"
                 dangerouslySetInnerHTML={{ __html: heroTitle }}
               />
 
-              <div 
+              <div
                 className="text-[15px] text-slate-500 font-medium leading-relaxed mb-10 max-w-none lg:max-w-md [&>p]:mb-4 last:[&>p]:mb-0"
                 dangerouslySetInnerHTML={{ __html: heroDescription }}
               />
@@ -493,9 +505,7 @@ export function AllLabsPage() {
               </h2>
               <p className="text-[15px] text-slate-500 font-medium">Explore our specialized research and development sectors.</p>
             </div>
-            <Link href="/services" className="text-[14px] font-bold text-[#e63946] mt-4 md:mt-0 flex items-center gap-1 hover:underline">
-              View All Initiatives <FiArrowRight />
-            </Link>
+
           </div>
 
           <div className="grid lg:grid-cols-12 gap-6">
@@ -521,7 +531,7 @@ export function AllLabsPage() {
                     <h3 className="text-[22px] sm:text-[30px] lg:text-[36px] font-black !text-white leading-tight mb-2 sm:mb-3">
                       {card.title}
                     </h3>
-                    <div className="text-[13px] sm:text-[14px] text-slate-300 font-medium max-w-none lg:max-w-sm" dangerouslySetInnerHTML={{ __html: card.description }} />
+                    <div className="text-[13px] sm:text-[14px] text-slate-300 font-medium max-w-none lg:max-w-sm html-content" dangerouslySetInnerHTML={{ __html: card.description }} />
                     {card.btnText && (
                       <Link href={card.link || '#'} className="mt-4 inline-flex items-center gap-1 text-[13px] font-bold text-[#e63946] hover:gap-2 transition-all target='_blank' ">
                         {card.btnText} <FiArrowRight />
@@ -535,21 +545,28 @@ export function AllLabsPage() {
             {/* Right stacked cards */}
             <div className="lg:col-span-5 flex flex-col gap-6">
               {stackedCards.map((card: any) => {
-                if (card.layout === 'gradient-cta') {
+                 if (card.layout === 'gradient-cta') {
                   return (
-                    <div key={card.id} className="bg-gradient-to-br from-[#e63946] to-[#c1121f] rounded-[2rem] p-8 shadow-lg text-white relative overflow-hidden h-full flex flex-col justify-center min-h-[220px]">
-                      <FiZap className="absolute -right-8 -bottom-8 text-[180px] opacity-10 transform -rotate-12 pointer-events-none" />
+                    <div key={card.id} className="bg-gradient-to-br from-[#e63946] to-[#c1121f] rounded-[2rem] p-8 shadow-lg text-white relative overflow-hidden h-full flex flex-col justify-between min-h-[220px]">
+                      <FiZap className="absolute -right-8 -bottom-8 text-[180px] text-red-950 opacity-20 transform -rotate-12 pointer-events-none" />
 
-                      <div className="absolute top-8 left-8 w-12 h-12 bg-white rounded-xl text-[#e63946] flex items-center justify-center shadow-md">
+                      <div className="w-12 h-12 bg-white rounded-xl text-[#e63946] flex items-center justify-center shadow-md relative z-10 mb-6">
                         <FiZap size={24} />
                       </div>
 
-                      <div className="mt-14 relative z-10 mt-5">
-                        <h4 className="text-[24px] font-black mb-2 text-black">{card.title}</h4>
-                        <div className="text-[13px] text-red-100 font-medium mb-8 max-w-sm md:max-w-none lg:max-w-sm" dangerouslySetInnerHTML={{ __html: card.description }} />
-                        <div className="flex gap-4">
-
-                        </div>
+                      <div className="relative z-10 flex-1 flex flex-col justify-end">
+                        <h4 className="text-[24px] font-black mb-2 text-[#0f172a]">{card.title}</h4>
+                        <div className="text-[13px] text-white font-medium html-content" dangerouslySetInnerHTML={{ __html: card.description }} />
+                        {card.btnText && (
+                          <div className="mt-4 flex gap-4">
+                            <Link
+                              href={card.link || '#'}
+                              className="inline-flex h-10 px-6 bg-white text-[#e63946] rounded-lg items-center justify-center text-[13px] font-bold hover:bg-slate-50 transition-colors shadow-md"
+                            >
+                              {card.btnText} <FiArrowRight className="ml-1.5" />
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -563,12 +580,12 @@ export function AllLabsPage() {
                         <img src={resolveImageUrl(card.imageUrl)} alt={card.title} className="w-full h-full object-cover" />
                       </div>
                     )}
-                    <div className="flex flex-col justify-center">
+                    <div className="flex flex-col justify-center min-w-0 flex-1">
                       {card.badge && (
                         <span className="text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest">{card.badge}</span>
                       )}
                       <h4 className="text-[22px] font-black text-[#0f172a] mb-2">{card.title}</h4>
-                      <div className="text-[13px] text-slate-500 font-medium mb-4" dangerouslySetInnerHTML={{ __html: card.description }} />
+                      <div className="text-[13px] text-slate-500 font-medium mb-4 html-content" dangerouslySetInnerHTML={{ __html: card.description }} />
                       <Link href={card.link || '/services'} className="text-[13px] font-bold text-[#e63946] flex items-center gap-1 hover:gap-2 transition-all">
                         {card.btnText || 'Learn More'} <FiArrowRight />
                       </Link>
@@ -596,25 +613,23 @@ export function AllLabsPage() {
 
             {/* Navigation Arrows (Moved to header) */}
             <div className="flex items-center gap-2 lg:hidden shrink-0 pb-1 self-end sm:self-auto">
-              <button 
+              <button
                 onClick={scrollTimelineLeft}
                 disabled={!canScrollTimelineLeft}
-                className={`w-10 h-10 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center transition-all ${
-                  !canScrollTimelineLeft 
-                    ? 'opacity-30 cursor-not-allowed text-slate-300' 
+                className={`w-10 h-10 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center transition-all ${!canScrollTimelineLeft
+                    ? 'opacity-30 cursor-not-allowed text-slate-300'
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 <FiChevronLeft size={20} />
               </button>
-              <button 
+              <button
                 onClick={scrollTimelineRight}
                 disabled={!canScrollTimelineRight}
-                className={`w-10 h-10 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center transition-all ${
-                  !canScrollTimelineRight 
-                    ? 'opacity-30 cursor-not-allowed text-slate-300' 
+                className={`w-10 h-10 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center transition-all ${!canScrollTimelineRight
+                    ? 'opacity-30 cursor-not-allowed text-slate-300'
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 <FiChevronRight size={20} />
               </button>
@@ -627,7 +642,7 @@ export function AllLabsPage() {
             <div className="absolute top-[30px] left-10 right-10 h-[2px] bg-slate-100 z-0" />
 
             {/* Timeline Steps */}
-            <div 
+            <div
               ref={timelineRef}
               onScroll={checkTimelineScroll}
               className="w-full flex lg:grid lg:grid-cols-6 gap-6 px-10 overflow-x-auto snap-x snap-mandatory lg:overflow-visible pb-4 custom-scrollbar"
@@ -769,11 +784,11 @@ export function AllLabsPage() {
 
               {/* Text Content */}
               <div className="text-center md:text-left z-10">
-                <h2 
+                <h2
                   className="text-[24px] sm:text-[32px] font-black !text-white leading-tight mb-2"
                   dangerouslySetInnerHTML={{ __html: ctaTitle }}
                 />
-                <div 
+                <div
                   className="text-slate-300 text-[14px] font-medium max-w-none md:max-w-sm mx-auto md:mx-0 [&>p]:mb-4 last:[&>p]:mb-0"
                   dangerouslySetInnerHTML={{ __html: ctaDescription }}
                 />

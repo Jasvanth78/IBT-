@@ -29,12 +29,12 @@ const footerLinks = [
     title: 'Company',
     items: [
       { label: 'Home', href: '/' },
-      { label: 'About Us', href: '/about' },
+      { label: 'About Us', href: '/about-us' },
 
       { label: 'Services', href: '/services' },
       { label: 'Internship', href: '/internship' },
 
-      { label: 'Contact Us', href: '/contact' },
+      { label: 'Contact Us', href: '/contact-us' },
 
     ],
   },

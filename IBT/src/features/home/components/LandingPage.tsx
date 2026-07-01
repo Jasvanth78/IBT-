@@ -41,7 +41,7 @@ export function LandingPage() {
 
               <div className="flex flex-wrap gap-4 items-center mt-6 md:mt-8">
                 <SiteButton
-                  href="/contact"
+                  href="/contact-us"
                   className="w-full sm:w-auto bg-[#e63946] hover:bg-[#c1121f] text-white rounded-md px-7 py-3.5 font-bold text-sm transition-all shadow-md shadow-red-500/20"
                   rightIcon={<FiArrowRight size={16} />}
                 >

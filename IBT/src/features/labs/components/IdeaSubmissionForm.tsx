@@ -19,7 +19,7 @@ export function IdeaSubmissionForm() {
   const showToast = (message: string, variant: 'success' | 'error' = 'success') => {
     setToast({ open: true, message, variant });
   };
-  
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -135,7 +135,7 @@ export function IdeaSubmissionForm() {
       submitData.append('ideaTitle', formData.ideaTitle);
       submitData.append('description', formData.description);
       submitData.append('privacyAccepted', formData.privacyAccepted ? 'true' : 'false');
-      
+
       files.forEach(file => {
         submitData.append('attachments', file);
       });
@@ -169,7 +169,7 @@ export function IdeaSubmissionForm() {
         </div>
         <h3 className="text-2xl font-black text-[#0f172a] mb-4">Idea Submitted Successfully!</h3>
         <p className="text-slate-500 mb-8">Thank you for sharing your idea. Our team will review it and get back to you soon.</p>
-        <button 
+        <button
           onClick={() => setSuccess(false)}
           className="px-6 py-3 bg-slate-900 text-white rounded-lg font-bold text-sm hover:bg-slate-800 transition-colors"
         >
@@ -191,8 +191,8 @@ export function IdeaSubmissionForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="block text-sm font-bold text-slate-800">First name <span className="text-red-500">*</span></label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="firstName"
               required
               value={formData.firstName}
@@ -203,8 +203,8 @@ export function IdeaSubmissionForm() {
           </div>
           <div className="space-y-2">
             <label className="block text-sm font-bold text-slate-800">Last name</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
@@ -216,8 +216,8 @@ export function IdeaSubmissionForm() {
 
         <div className="space-y-2">
           <label className="block text-sm font-bold text-slate-800">Email address <span className="text-red-500">*</span></label>
-          <input 
-            type="email" 
+          <input
+            type="email"
             name="email"
             required
             value={formData.email}
@@ -229,7 +229,7 @@ export function IdeaSubmissionForm() {
 
         <div className="space-y-2">
           <label className="block text-sm font-bold text-slate-800">Category <span className="text-red-500">*</span></label>
-          <select 
+          <select
             name="category"
             required
             value={formData.category}
@@ -241,8 +241,8 @@ export function IdeaSubmissionForm() {
             ))}
           </select>
           {formData.category === 'Other' && (
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="otherCategory"
               required
               value={formData.otherCategory}
@@ -256,8 +256,8 @@ export function IdeaSubmissionForm() {
 
         <div className="space-y-2">
           <label className="block text-sm font-bold text-slate-800">Idea title <span className="text-red-500">*</span></label>
-          <input 
-            type="text" 
+          <input
+            type="text"
             name="ideaTitle"
             required
             value={formData.ideaTitle}
@@ -270,7 +270,7 @@ export function IdeaSubmissionForm() {
         <div className="space-y-2">
           <label className="block text-sm font-bold text-slate-800">Describe your idea <span className="text-red-500">*</span></label>
           <div className="relative">
-            <textarea 
+            <textarea
               name="description"
               required
               rows={5}
@@ -288,7 +288,7 @@ export function IdeaSubmissionForm() {
 
         <div className="space-y-2">
           <label className="block text-sm font-bold text-slate-800">Attachments</label>
-          <div 
+          <div
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileDrop}
             className="w-full border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center justify-center text-center hover:bg-slate-50 transition-colors cursor-pointer"
@@ -297,24 +297,24 @@ export function IdeaSubmissionForm() {
             <FiUploadCloud className="text-3xl text-slate-400 mb-3" />
             <p className="text-sm font-bold text-slate-800 mb-1">Drop files here or click to browse</p>
             <p className="text-xs text-slate-500">Screenshots, mockups, or documents — up to 5 files, 10 MB each</p>
-            <input 
-              type="file" 
-              multiple 
-              className="hidden" 
+            <input
+              type="file"
+              multiple
+              className="hidden"
               ref={fileInputRef}
               onChange={handleFileInput}
               accept=".pdf,.doc,.docx,.ppt,.pptx,.png,.jpg,.jpeg"
             />
           </div>
           <p className="text-xs font-medium text-slate-500 mt-2">Accepted: Images, PDF, Word, PowerPoint</p>
-          
+
           {files.length > 0 && (
             <div className="mt-4 space-y-2">
               {files.map((file, i) => (
                 <div key={i} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-lg">
                   <span className="text-sm font-medium text-slate-700 truncate">{file.name}</span>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => removeFile(i)}
                     className="text-slate-400 hover:text-red-500"
                   >
@@ -329,8 +329,8 @@ export function IdeaSubmissionForm() {
         <div className="pt-4 border-t border-slate-100">
           <label className="flex items-start gap-3 cursor-pointer group">
             <div className="mt-1 flex-shrink-0">
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 name="privacyAccepted"
                 checked={formData.privacyAccepted}
                 onChange={handleChange}
@@ -338,13 +338,13 @@ export function IdeaSubmissionForm() {
               />
             </div>
             <span className="text-sm text-slate-600 font-medium">
-              I agree that my idea and contact details may be stored and reviewed by the team. I have read the <a href="/privacy" className="text-blue-600 hover:underline">privacy policy</a>.
+              I agree that my idea and contact details may be stored and reviewed by the team. I have read the privacy policy.
             </span>
           </label>
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={isSubmitting}
           className="w-full flex items-center justify-center gap-2 py-4 bg-white border-2 border-slate-900 text-slate-900 rounded-xl font-bold hover:bg-slate-900 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >

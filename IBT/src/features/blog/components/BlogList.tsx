@@ -13,7 +13,7 @@ type BlogListProps = {
   apiOrigin: string;
 };
 
-const POSTS_PER_PAGE = 6;
+const POSTS_PER_PAGE = 4;
 
 export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
   const [search, setSearch] = useState('');
@@ -62,7 +62,10 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
   };
 
   const filteredBlogs = useMemo(() => {
+    // Exclude the featured article from the main listing grid to avoid duplication
+    const featured = initialBlogs.find(blog => blog.featured);
     return initialBlogs.filter(blog => {
+      if (featured && blog.id === featured.id) return false;
       const matchesSearch = blog.title.toLowerCase().includes(search.toLowerCase()) ||
         (blog.description || '').toLowerCase().includes(search.toLowerCase());
       const matchesCategory = selectedCategory === 'All Posts' || blog.category === selectedCategory;
@@ -236,62 +239,6 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
                   </div>
                 </Link>
               ))}
-            </div>
-          </div>
-
-          {/* Categories Widget */}
-          <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
-            <h4 className="text-[16px] font-black text-[#0f172a] mb-3 pb-4">Categories</h4>
-            <div className="flex flex-col gap-4">
-              {/* All Posts */}
-              <button
-                onClick={() => handleCategoryChange('All Posts')}
-                className="flex items-center justify-between group w-full text-left"
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${selectedCategory === 'All Posts' ? 'border-[#e63946]' : 'border-red-100 group-hover:border-[#e63946]'
-                    }`}>
-                    <div className={`w-1.5 h-1.5 rounded-full bg-[#e63946] transition-opacity ${selectedCategory === 'All Posts' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                      }`}></div>
-                  </div>
-                  <span className={`text-[14px] transition-colors ${selectedCategory === 'All Posts' ? 'text-[#0f172a] font-bold' : 'text-slate-600 group-hover:text-[#0f172a] font-medium'
-                    }`}>
-                    All Posts
-                  </span>
-                </div>
-                <span className={`text-[12px] font-bold px-2 py-0.5 rounded transition-colors ${selectedCategory === 'All Posts' ? 'text-[#e63946] bg-red-50' : 'text-slate-400 bg-slate-50'
-                  }`}>
-                  ({initialBlogs.length})
-                </span>
-              </button>
-
-              {/* Dynamic Categories */}
-              {Object.entries(categoryCounts).map(([cat, count]) => {
-                const isSelected = selectedCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => handleCategoryChange(cat)}
-                    className="flex items-center justify-between group w-full text-left"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${isSelected ? 'border-[#e63946]' : 'border-red-100 group-hover:border-[#e63946]'
-                        }`}>
-                        <div className={`w-1.5 h-1.5 rounded-full bg-[#e63946] transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                          }`}></div>
-                      </div>
-                      <span className={`text-[14px] transition-colors ${isSelected ? 'text-[#0f172a] font-bold' : 'text-slate-600 group-hover:text-[#0f172a] font-medium'
-                        }`}>
-                        {formatCategoryName(cat)}
-                      </span>
-                    </div>
-                    <span className={`text-[12px] font-bold px-2 py-0.5 rounded transition-colors ${isSelected ? 'text-[#e63946] bg-red-50' : 'text-slate-400 bg-slate-50'
-                      }`}>
-                      ({count})
-                    </span>
-                  </button>
-                );
-              })}
             </div>
           </div>
 

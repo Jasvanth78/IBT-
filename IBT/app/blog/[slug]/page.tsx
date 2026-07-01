@@ -179,9 +179,17 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                             [&_a]:text-[#e63946] [&_a]:font-semibold [&_a]:underline hover:[&_a]:text-red-700
                             [&_img]:rounded-2xl [&_img]:my-8 [&_img]:shadow-md [&_img]:max-h-[400px] [&_img]:object-cover
                             [&_strong]:text-slate-900 [&_strong]:font-bold
-                            [&_blockquote]:border-l-4 [&_blockquote]:border-red-500 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-6 [&_blockquote]:text-slate-500"
+                            [&_blockquote]:border-l-4 [&_blockquote]:border-red-500 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-6 [&_blockquote]:text-slate-500
+                            [&_table]:min-w-full [&_table]:border-collapse [&_table]:text-[15px]
+                            [&_th]:border-b [&_th]:border-r [&_th]:border-slate-200 last:[&_th]:border-r-0 [&_th]:bg-slate-50/80 [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:font-bold [&_th]:text-[#0f172a]
+                            [&_td]:border-b [&_td]:border-r [&_td]:border-slate-200 last:[&_td]:border-r-0 [&_td]:px-4 [&_td]:py-3 [&_td]:text-slate-600 [&_td]:leading-relaxed
+                            [&_tr]:border-b [&_tr]:border-slate-200 last:[&_tr]:border-b-0 [&_tr]:hover:bg-slate-50/50"
                  dangerouslySetInnerHTML={{ 
-                   __html: blog.content.replace(/&nbsp;/gi, ' ').replace(/\u00a0/g, ' ') 
+                   __html: blog.content
+                     .replace(/&nbsp;/gi, ' ')
+                     .replace(/\u00a0/g, ' ')
+                     .replace(/<table/gi, '<div class="overflow-x-auto overflow-hidden w-full border border-slate-200 rounded-xl my-6"><table')
+                     .replace(/<\/table>/gi, '</table></div>')
                  }}
                />
             ) : (
@@ -365,33 +373,6 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                     </Link>
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* Categories */}
-            {categories.length > 0 && (
-              <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                <h3 className="text-[18px] font-black text-[#0f172a] mb-3">Categories</h3>
-                <ul className="space-y-4 mb-6">
-                  {categories.map((cat, idx) => (
-                    <li key={idx}>
-                      <Link href={`/blog?category=${encodeURIComponent(cat.name)}`} className="group flex items-center justify-between text-slate-600 hover:text-[#e63946] transition-colors">
-                        <div className="flex items-center gap-3">
-                          <div className="text-[#e63946] opacity-70 group-hover:opacity-100 transition-opacity">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-                          </div>
-                          <span className="text-[14px] font-semibold">{formatCategoryName(cat.name)}</span>
-                        </div>
-                        <span className="text-[12px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">
-                          ({cat.count})
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/blog" className="inline-flex items-center gap-2 text-[13px] font-bold text-[#e63946] hover:text-red-700 transition-colors">
-                  View All Categories <FiArrowRight size={14} />
-                </Link>
               </div>
             )}
 

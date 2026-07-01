@@ -4,6 +4,7 @@ import * as controller from "../controllers/blog.controller";
 import { authenticate } from "../middlewares/auth.middleware";
 import { authorize } from "../middlewares/role.middleware";
 import { validate } from "../middlewares/validate.middleware";
+import { documentUpload } from "../middlewares/documentUpload.middleware";
 import {
   createBlogSchema,
   updateBlogSchema,
@@ -21,6 +22,14 @@ router.post(
   authorize(...cmsEditors),
   validate(createBlogSchema),
   controller.createBlog
+);
+
+router.post(
+  "/import-document",
+  authenticate,
+  authorize(...cmsEditors),
+  documentUpload.single("file"),
+  controller.importDocument
 );
 
 router.patch(

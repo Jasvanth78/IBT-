@@ -59,3 +59,12 @@ export const deleteBlog = asyncHandler(async (req: AuthRequest, res: Response) =
 
   res.json(successResponse(result, "Blog deleted"));
 });
+
+export const importDocument = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (!req.file) {
+    throw httpError(400, "File is required");
+  }
+  const result = await blogService.importDocument(req.file);
+  res.status(200).json(successResponse(result, "Document imported successfully"));
+});
+

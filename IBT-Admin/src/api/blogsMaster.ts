@@ -71,3 +71,26 @@ export async function uploadBlogImage(file: File) {
 
   return response.data.data
 }
+
+export async function importBlogDocument(
+  file: File,
+  onUploadProgress?: (progressEvent: any) => void
+) {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  const response = await apiClient.post<
+    MasterApiResponse<{
+      success: boolean
+      html: string
+      warnings: string[]
+    }>
+  >(`${BASE_PATH}/import-document`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    onUploadProgress,
+  })
+
+  return response.data.data
+}

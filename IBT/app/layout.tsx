@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "I-BACUS TECH",
+  title: "I-BACUS-TECH SOLUTIONS PRIVATE LIMITED",
   description: "I-BACUS TECH Company Website with Modern Component Library and Public API",
 };
 

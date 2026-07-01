@@ -55,7 +55,7 @@ export function WhyChooseUsSection() {
               We combine technology, creativity and strategy to build solutions that create real impact.
             </p>
             <SiteButton
-              href="/about"
+              href="/about-us"
               className="w-full sm:w-auto bg-[#e63946] text-white rounded-md px-5 py-2.5 font-bold text-[12px] hover:bg-[#c1121f] transition-colors shadow-sm"
             >
               Know More About Us <FiArrowRight className="inline-block ml-1" />

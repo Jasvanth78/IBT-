@@ -2,6 +2,8 @@ import { AuditAction, BlogStatus } from "../../generated/prisma/client";
 import { prisma } from "../lib/prisma";
 import { httpError } from "../utils/httpError";
 import { logAction } from "../utils/logAction";
+import sanitizeHtml from "sanitize-html";
+import { parseDocx, parsePdf } from "../utils/documentParser";
 
 type CreateBlogInput = {
   title: string;
@@ -298,4 +300,61 @@ export const deleteBlog = async (blogId: string, userId?: string) => {
   });
 
   return { success: true };
+};
+
+export const importDocument = async (
+  file: Express.Multer.File
+): Promise<{ success: boolean; html: string; warnings: string[] }> => {
+  const extension = file.originalname.slice(file.originalname.lastIndexOf(".")).toLowerCase();
+  
+  let parsed: { html: string; warnings: string[] };
+  
+  if (extension === ".docx") {
+    parsed = await parseDocx(file.buffer);
+  } else if (extension === ".pdf") {
+    parsed = await parsePdf(file.buffer);
+  } else {
+    throw httpError(400, "Only .docx and .pdf files are supported.");
+  }
+  
+  const cleanHtml = sanitizeHtml(parsed.html, {
+    allowedTags: [
+      "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "p", "a", "ul", "ol",
+      "nl", "li", "b", "i", "strong", "em", "strike", "code", "hr", "br", "div",
+      "table", "thead", "caption", "tbody", "tr", "th", "td", "pre", "iframe", "img", "u"
+    ],
+    allowedAttributes: {
+      a: ["href", "name", "target", "title"],
+      img: ["src", "alt", "title", "width", "height", "style"],
+      table: ["style"],
+      td: ["style"],
+      th: ["style"],
+      div: ["style"],
+      p: ["style"],
+    },
+    allowedStyles: {
+      "*": {
+        "text-align": [/^left$/, /^right$/, /^center$/, /^justify$/],
+        "font-size": [/^\d+(px|em|rem|pt|%)?$/],
+        "font-weight": [/^(bold|normal|\d+)$/],
+        "margin": [/^\d+(px|em|rem|pt|%)?$/],
+        "margin-bottom": [/^\d+(px|em|rem|pt|%)?$/],
+        "margin-top": [/^\d+(px|em|rem|pt|%)?$/],
+        "padding": [/^\d+(px|em|rem|pt|%)?$/],
+        "width": [/^\d+(px|em|rem|pt|%)?$/],
+        "height": [/^\d+(px|em|rem|pt|%)?$/],
+        "max-width": [/^\d+(px|em|rem|pt|%)?$/],
+        "border-collapse": [/^collapse$/],
+        "border": [/^\d+px\s+solid\s+.*$/],
+        "vertical-align": [/^(top|middle|bottom)$/],
+      }
+    },
+    selfClosing: ["img", "br", "hr", "area", "base", "basefont", "input", "link", "meta"],
+  });
+  
+  return {
+    success: true,
+    html: cleanHtml,
+    warnings: parsed.warnings,
+  };
 };

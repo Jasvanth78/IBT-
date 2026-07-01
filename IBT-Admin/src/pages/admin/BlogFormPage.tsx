@@ -112,6 +112,7 @@ export function BlogFormPage() {
   const queryClient = useQueryClient()
 
   const isEditMode = Boolean(blogId)
+  const draftKey = isEditMode ? `ibt_blog_draft_edit_${blogId}` : 'ibt_blog_draft_create'
 
   const [formValues, setFormValues] = useState<FormValues>(() => {
     if (state?.blog) {
@@ -127,6 +128,8 @@ export function BlogFormPage() {
   const [toastMessage, setToastMessage] = useState('')
   const [toastVariant, setToastVariant] = useState<ToastVariant>('success')
 
+  const [draftToRestore, setDraftToRestore] = useState<{ formValues: FormValues; timestamp: number } | null>(null)
+
   const { data: fetchedBlog, isLoading: isFetchingBlog, isError: isFetchBlogError, error: fetchBlogError, refetch: refetchBlog } = useQuery({
     queryKey: ['master-blog', blogId],
     queryFn: () => getBlogMasterItemById(blogId!),
@@ -139,9 +142,73 @@ export function BlogFormPage() {
     }
   }, [fetchedBlog, state?.blog])
 
+  // Check for draft on mount or when details finish loading
+  useEffect(() => {
+    if (isEditMode && isFetchingBlog) return
+
+    const savedDraft = window.localStorage.getItem(draftKey)
+    if (savedDraft) {
+      try {
+        const parsed = JSON.parse(savedDraft) as { formValues: FormValues; timestamp: number }
+        
+        // Check if the draft is actually different from the current form values
+        const hasDiff = Object.keys(EMPTY_FORM).some((k) => {
+          const key = k as keyof FormValues
+          return parsed.formValues[key] !== formValues[key]
+        })
+
+        if (hasDiff) {
+          setDraftToRestore(parsed)
+        }
+      } catch (e) {
+        console.warn('Failed to parse blog draft:', e)
+      }
+    }
+  }, [isEditMode, isFetchingBlog, fetchedBlog, draftKey])
+
+  // Auto-save draft as user edits form values
+  useEffect(() => {
+    if (isEditMode && isFetchingBlog) return
+    if (draftToRestore) return
+
+    const isFormEmpty = Object.keys(EMPTY_FORM).every((k) => {
+      const key = k as keyof FormValues
+      return formValues[key] === EMPTY_FORM[key]
+    })
+    
+    const initialFormValues = fetchedBlog ? mapItemToForm(fetchedBlog) : EMPTY_FORM
+    const isUnchanged = Object.keys(EMPTY_FORM).every((k) => {
+      const key = k as keyof FormValues
+      return formValues[key] === initialFormValues[key]
+    })
+
+    if (isFormEmpty || isUnchanged) {
+      return
+    }
+
+    const draftData = {
+      formValues,
+      timestamp: Date.now(),
+    }
+    window.localStorage.setItem(draftKey, JSON.stringify(draftData))
+  }, [formValues, isEditMode, isFetchingBlog, fetchedBlog, draftKey, draftToRestore])
+
+  const handleRestoreDraft = () => {
+    if (draftToRestore) {
+      setFormValues(draftToRestore.formValues)
+      setDraftToRestore(null)
+    }
+  }
+
+  const handleDiscardDraft = () => {
+    window.localStorage.removeItem(draftKey)
+    setDraftToRestore(null)
+  }
+
   const createMutation = useMutation({
     mutationFn: createBlogsMasterItem,
     onSuccess: () => {
+      window.localStorage.removeItem(draftKey)
       queryClient.invalidateQueries({ queryKey: ['master-blogs'] })
       navigate('/admin/master/blogs', {
         state: { toastMessage: 'Blog created successfully.', toastVariant: 'success' },
@@ -158,6 +225,7 @@ export function BlogFormPage() {
     mutationFn: ({ itemId, payload }: { itemId: string; payload: Parameters<typeof updateBlogsMasterItem>[1] }) =>
       updateBlogsMasterItem(itemId, payload),
     onSuccess: () => {
+      window.localStorage.removeItem(draftKey)
       queryClient.invalidateQueries({ queryKey: ['master-blogs'] })
       queryClient.invalidateQueries({ queryKey: ['master-blog', blogId] })
       navigate('/admin/master/blogs', {
@@ -300,6 +368,37 @@ export function BlogFormPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex h-full flex-1 flex-col">
+        {draftToRestore && (
+          <div className="mx-4 mt-4 flex flex-col gap-3 rounded-[var(--ui-radius-lg)] border border-amber-200 bg-amber-50 p-4 shadow-[var(--ui-shadow-sm)] sm:flex-row sm:items-center sm:justify-between md:mx-6">
+            <div className="flex items-start gap-3">
+              <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber-100 text-amber-600">
+                <FiAlertTriangle size={18} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-amber-800">Unsaved draft found</p>
+                <p className="text-xs text-amber-700 font-medium">
+                  We found a newer unsaved draft from {new Date(draftToRestore.timestamp).toLocaleString()}.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-2 shrink-0 justify-end">
+              <button
+                type="button"
+                onClick={handleRestoreDraft}
+                className="rounded-md bg-amber-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-amber-700 transition"
+              >
+                Restore Draft
+              </button>
+              <button
+                type="button"
+                onClick={handleDiscardDraft}
+                className="rounded-md border border-amber-300 bg-white px-3.5 py-1.5 text-xs font-bold text-amber-700 shadow-sm hover:bg-amber-50 transition"
+              >
+                Discard
+              </button>
+            </div>
+          </div>
+        )}
         <div className="mx-auto w-full flex-1">
           <div className="space-y-6">
             <div className="bg-white p-5 shadow-sm sm:p-6">
@@ -328,6 +427,7 @@ export function BlogFormPage() {
                   placeholder="Write the full blog post here..."
                   helperText="Supports headings, bold/italic/underline, lists, quotes, code blocks, links, separators, and undo/redo."
                   minHeight={400}
+                  showImportButton={true}
                 />
 
                 <div className=''>

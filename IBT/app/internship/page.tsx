@@ -276,20 +276,20 @@ export default async function InternshipPage() {
               </div>
 
               {/* Floating Badge */}
-              <div className="absolute -bottom-8 left-4 right-4 sm:right-auto sm:left-4 lg:-left-8 bg-white p-4 sm:p-6 rounded-2xl shadow-2xl border border-slate-100 flex items-center gap-4 sm:gap-5 sm:min-w-[280px] z-20">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-xl bg-red-50 text-[#e63946] flex items-center justify-center shadow-inner">
-                  <FiUsers size={24} className="scale-75 sm:scale-100" />
+              <div className="absolute -bottom-8 left-4 right-4 mx-auto w-fit sm:left-4 sm:right-auto sm:mx-0 lg:-left-8 bg-white p-3 sm:p-6 rounded-2xl shadow-2xl border border-slate-100 flex items-center gap-3 sm:gap-5 sm:min-w-[280px] z-20">
+                <div className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 rounded-xl bg-red-50 text-[#e63946] flex items-center justify-center shadow-inner">
+                  <FiUsers size={20} className="sm:scale-100" />
                 </div>
                 <div>
-                  <div className="text-[20px] sm:text-[24px] font-black text-[#0f172a] leading-none mb-1">5000+</div>
-                  <div className="text-[11px] sm:text-[12px] font-bold text-slate-500 mb-2">Interns Trained</div>
+                  <div className="text-[18px] sm:text-[24px] font-black text-[#0f172a] leading-none mb-0.5">5000+</div>
+                  <div className="text-[10px] sm:text-[12px] font-bold text-slate-500 mb-1.5">Interns Trained</div>
                   {/* Tiny Avatar Group */}
-                  <div className="flex -space-x-2">
-                    <img className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar 1" />
-                    <img className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Avatar 2" />
-                    <img className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Avatar 3" />
-                    <img className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Avatar 4" />
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[8px] font-bold text-slate-500">+</div>
+                  <div className="flex -space-x-1.5 sm:-space-x-2">
+                    <img className="w-4 h-4 sm:w-6 sm:h-6 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar 1" />
+                    <img className="w-4 h-4 sm:w-6 sm:h-6 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Avatar 2" />
+                    <img className="w-4 h-4 sm:w-6 sm:h-6 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Avatar 3" />
+                    <img className="w-4 h-4 sm:w-6 sm:h-6 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Avatar 4" />
+                    <div className="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-slate-200 bg-slate-100 flex items-center justify-center text-[7px] font-bold text-slate-500">+</div>
                   </div>
                 </div>
               </div>
@@ -367,65 +367,65 @@ export default async function InternshipPage() {
 
           <InternshipJourneyTimeline>
 
-              {/* Step 01 */}
-              <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
-                <div className="text-[36px] font-black text-red-500 mb-2 leading-none">01</div>
-                <div className="w-14 h-14 rounded-full bg-red-50 text-red-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
-                  <FiMonitor size={20} />
-                </div>
-                <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Apply Online</h4>
-                <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
-                  Fill the application form and choose your preferred domain.
-                </p>
+            {/* Step 01 */}
+            <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
+              <div className="text-[36px] font-black text-red-500 mb-2 leading-none">01</div>
+              <div className="w-14 h-14 rounded-full bg-red-50 text-red-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
+                <FiMonitor size={20} />
               </div>
+              <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Apply Online</h4>
+              <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
+                Fill the application form and choose your preferred domain.
+              </p>
+            </div>
 
-              {/* Step 02 */}
-              <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
-                <div className="text-[36px] font-black text-blue-500 mb-2 leading-none">02</div>
-                <div className="w-14 h-14 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
-                  <FiUserPlus size={20} />
-                </div>
-                <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Screening</h4>
-                <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
-                  Our team reviews your application and shortlists the best fit.
-                </p>
+            {/* Step 02 */}
+            <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
+              <div className="text-[36px] font-black text-blue-500 mb-2 leading-none">02</div>
+              <div className="w-14 h-14 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
+                <FiUserPlus size={20} />
               </div>
+              <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Screening</h4>
+              <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
+                Our team reviews your application and shortlists the best fit.
+              </p>
+            </div>
 
-              {/* Step 03 */}
-              <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
-                <div className="text-[36px] font-black text-yellow-500 mb-2 leading-none">03</div>
-                <div className="w-14 h-14 rounded-full bg-yellow-50 text-yellow-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
-                  <FiBookOpen size={20} />
-                </div>
-                <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Onboarding</h4>
-                <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
-                  Get access to resources, tools and your learning roadmap.
-                </p>
+            {/* Step 03 */}
+            <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
+              <div className="text-[36px] font-black text-yellow-500 mb-2 leading-none">03</div>
+              <div className="w-14 h-14 rounded-full bg-yellow-50 text-yellow-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
+                <FiBookOpen size={20} />
               </div>
+              <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Onboarding</h4>
+              <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
+                Get access to resources, tools and your learning roadmap.
+              </p>
+            </div>
 
-              {/* Step 04 */}
-              <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
-                <div className="text-[36px] font-black text-purple-500 mb-2 leading-none">04</div>
-                <div className="w-14 h-14 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
-                  <FiCode size={20} />
-                </div>
-                <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Learn & Build</h4>
-                <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
-                  Work on real projects with guidance from industry experts.
-                </p>
+            {/* Step 04 */}
+            <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
+              <div className="text-[36px] font-black text-purple-500 mb-2 leading-none">04</div>
+              <div className="w-14 h-14 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
+                <FiCode size={20} />
               </div>
+              <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Learn & Build</h4>
+              <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
+                Work on real projects with guidance from industry experts.
+              </p>
+            </div>
 
-              {/* Step 05 */}
-              <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
-                <div className="text-[36px] font-black text-green-500 mb-2 leading-none">05</div>
-                <div className="w-14 h-14 rounded-full bg-green-50 text-green-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
-                  <FiAward size={20} />
-                </div>
-                <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Evaluate & Grow</h4>
-                <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
-                  Receive feedback, improve your skills and become job-ready.
-                </p>
+            {/* Step 05 */}
+            <div className="relative z-10 flex flex-col items-center text-center shrink-0 w-[260px] sm:w-[300px] lg:w-auto snap-center">
+              <div className="text-[36px] font-black text-green-500 mb-2 leading-none">05</div>
+              <div className="w-14 h-14 rounded-full bg-green-50 text-green-500 flex items-center justify-center shadow-sm mb-5 border-[4px] border-white ring-1 ring-slate-100">
+                <FiAward size={20} />
               </div>
+              <h4 className="text-[16px] font-bold text-[#0f172a] mb-2">Evaluate & Grow</h4>
+              <p className="text-[13px] text-slate-500 font-medium leading-relaxed px-2">
+                Receive feedback, improve your skills and become job-ready.
+              </p>
+            </div>
 
           </InternshipJourneyTimeline>
         </div>
@@ -446,9 +446,7 @@ export default async function InternshipPage() {
                 Explore Internship Roles
               </h2>
             </div>
-            <Link href="/services" className="text-[14px] font-bold text-[#e63946] mt-4 md:mt-0 flex items-center gap-1 hover:underline">
-              View All Programs <FiArrowRight />
-            </Link>
+
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
