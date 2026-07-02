@@ -51,7 +51,7 @@ export function WhatsappButton() {
   const cleanNumber = phoneNumber ? phoneNumber.replace(/\D/g, '') : ''
 
   return (
-    <div className="whatsapp-btn-wrapper fixed bottom-6 right-6 z-[999999] flex flex-col items-center gap-3 transition-opacity duration-300">
+    <div className="whatsapp-btn-wrapper fixed bottom-20 right-6 z-[999999] flex flex-col items-center gap-3 transition-opacity duration-300">
       <AnimatePresence>
         {showScrollTop && (
           <motion.button

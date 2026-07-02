@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { FiAlertTriangle, FiArrowLeft, FiRefreshCw, FiSave } from 'react-icons/fi'
+import { FiAlertTriangle, FiArrowLeft, FiRefreshCw, FiSave, FiPlus, FiTrash2 } from 'react-icons/fi'
 import { ActionButton, Dropdown, Input, Loader, RichTextEditor, Toast } from '../../component'
 import {
   createBlogsMasterItem,
@@ -28,6 +28,7 @@ type FormValues = {
   status: BlogStatus
   featured: boolean
   publishedAt: string
+  quickTips: string[]
 }
 
 const STATUS_FORM_OPTIONS = [
@@ -50,6 +51,7 @@ const EMPTY_FORM: FormValues = {
   status: 'DRAFT',
   featured: false,
   publishedAt: '',
+  quickTips: [],
 }
 
 function getApiErrorMessage(error: unknown, fallback: string) {
@@ -102,6 +104,7 @@ function mapItemToForm(item: BlogMasterItem): FormValues {
     status: item.status,
     featured: item.featured,
     publishedAt: toDateTimeLocalValue(item.publishedAt),
+    quickTips: item.quickTips ?? [],
   }
 }
 
@@ -285,6 +288,7 @@ export function BlogFormPage() {
         status: formValues.status,
         featured: formValues.featured,
         publishedAt: toIsoValue(formValues.publishedAt),
+        quickTips: (formValues.quickTips || []).map((t) => t.trim()).filter(Boolean),
       }
 
       if (!isEditMode) {
@@ -460,6 +464,67 @@ export function BlogFormPage() {
                     value={formValues.publishedAt}
                     onChange={(event) => setFieldValue('publishedAt', event.target.value)}
                   />
+                </div>
+
+                {/* Quick Tips Section */}
+                <div className="rounded-xl border border-[var(--ui-border)] p-5 bg-[var(--ui-surface-muted)]/10 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="grid gap-0.5">
+                      <span className="text-sm font-semibold text-[var(--ui-text)]">Quick Tips (Manual)</span>
+                      <span className="text-xs text-[var(--ui-muted)]">These tips are displayed on the right sidebar of the blog details page.</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormValues((prev) => ({
+                          ...prev,
+                          quickTips: [...(prev.quickTips || []), ''],
+                        }))
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#e63946] bg-white px-3 py-1.5 text-xs font-bold text-[#e63946] shadow-sm hover:bg-red-50 transition-colors"
+                    >
+                      <FiPlus size={14} /> Add Tip
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {(formValues.quickTips || []).map((tip, index) => (
+                      <div key={index} className="flex gap-2 items-start">
+                        <div className="flex-1">
+                          <Input
+                            placeholder={`Tip ${index + 1}`}
+                            value={tip}
+                            onChange={(e) => {
+                              const updated = [...(formValues.quickTips || [])]
+                              updated[index] = e.target.value
+                              setFormValues((prev) => ({
+                                ...prev,
+                                quickTips: updated,
+                              }))
+                            }}
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = (formValues.quickTips || []).filter((_, i) => i !== index)
+                            setFormValues((prev) => ({
+                              ...prev,
+                              quickTips: updated,
+                            }))
+                          }}
+                          className="mt-1.5 p-2.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition"
+                          title="Remove Tip"
+                        >
+                          <FiTrash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+
+                    {(formValues.quickTips || []).length === 0 && (
+                      <p className="text-xs text-[var(--ui-muted)] italic">No quick tips added yet. Click "Add Tip" to add one.</p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid gap-6 sm:grid-cols-2">

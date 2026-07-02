@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiCalendar, FiMail } from 'react-icons/fi';
+import { FiSearch, FiCalendar, FiMail, FiGrid, FiPhone } from 'react-icons/fi';
 import { type PublicBlog } from '@/src/api/client';
 import { Pagination } from '@/src/shared/ui/Pagination';
 import { formatCategoryName } from '@/src/utils/category';
@@ -167,7 +167,7 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
                         <p className="text-[10px] font-bold uppercase tracking-widest text-red-500 mb-3">
                           {formatCategoryName(post.category) || 'IBT JOURNAL'}
                         </p>
-                        <h3 className="text-[18px] sm:text-[20px] font-black text-[#0f172a] leading-snug mb-3 group-hover:text-[#e63946] transition-colors">
+                        <h3 title={post.title} className="text-[18px] sm:text-[20px] font-black text-[#0f172a] leading-snug mb-3 group-hover:text-[#e63946] transition-colors">
                           {post.title}
                         </h3>
                         <p className="text-[14px] text-slate-500 font-medium leading-relaxed mb-6 line-clamp-2">
@@ -216,11 +216,11 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
         </div>
 
         {/* RIGHT COLUMN: Sidebar */}
-        <div className="w-full flex flex-col gap-8">
+        <div className="w-full flex flex-col gap-8 lg:sticky lg:top-[6rem] self-start">
 
           {/* Popular Posts Widget */}
           <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
-            <h4 className="text-[16px] font-black text-[#0f172a] mb-3 pb-4">Popular Posts</h4>
+            <h4 className="text-[16px] font-black text-[#0f172a] mb-3 pb-4 border-b border-slate-50">Popular Posts</h4>
             <div className="flex flex-col gap-6">
               {popularPosts.map((post) => (
                 <Link key={post.id} href={`/blog/${post.slug}`} className="group flex gap-4 items-center">
@@ -229,10 +229,15 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
                     alt={post.title}
                     className="w-20 h-16 rounded-lg object-cover bg-slate-100 shrink-0"
                   />
-                  <div>
-                    <h5 className="text-[13px] font-bold text-[#0f172a] leading-snug line-clamp-2 mb-1 group-hover:text-[#e63946] transition-colors">
-                      {post.title}
-                    </h5>
+                  <div className="relative">
+                    <div className="group/tooltip relative">
+                      <h5 className="text-[13px] font-bold text-[#0f172a] leading-snug line-clamp-2 mb-1 group-hover:text-[#e63946] transition-colors">
+                        {post.title}
+                      </h5>
+                      <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 w-64 max-w-[85vw] whitespace-normal rounded-lg bg-white border border-slate-200 px-3 py-2 text-[11px] font-bold tracking-wide text-[#0f172a] opacity-0 scale-95 group-hover/tooltip:opacity-100 group-hover/tooltip:scale-100 transition-all duration-200 z-50 text-center shadow-lg shadow-slate-200/50 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[6px] after:border-transparent after:border-t-white">
+                        {post.title}
+                      </span>
+                    </div>
                     <p className="text-[11px] font-medium text-slate-400">
                       {formatPublishedAt(post.publishedAt)}
                     </p>
@@ -240,6 +245,25 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
                 </Link>
               ))}
             </div>
+          </div>
+
+
+          {/* Need Help? CTA Card */}
+          <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm flex flex-col gap-4 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-red-50/50 rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform duration-500" />
+            <h4 className="text-[16px] font-black text-[#0f172a] flex items-center gap-2 relative z-10">
+              <FiPhone className="text-[#e63946]" size={16} />
+              Need Help?
+            </h4>
+            <p className="text-[12px] text-slate-500 font-medium leading-relaxed relative z-10">
+              Contact our expert support team to find the best solutions customized for your specific business requirements.
+            </p>
+            <Link
+              href="/contact-us"
+              className="w-full py-2.5 rounded-xl bg-[#e63946] text-white hover:bg-red-600 font-bold text-xs transition-all text-center tracking-wider uppercase shadow-[0_4px_12px_rgba(230,57,70,0.15)] hover:shadow-[0_6px_20px_rgba(230,57,70,0.25)] relative z-10"
+            >
+              Contact Us
+            </Link>
           </div>
 
         </div>

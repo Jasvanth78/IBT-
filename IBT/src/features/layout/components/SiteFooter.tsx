@@ -263,7 +263,7 @@ export function SiteFooter() {
 
       {/* Bottom Bar */}
       <div className="border-t border-slate-800">
-        <div className="mx-auto max-w-7xl px-6 pt-5 pb-24 md:pb-5 lg:px-8 flex justify-center items-center">
+        <div className="mx-auto max-w-7xl px-6 py-5 lg:px-8 flex justify-center items-center">
           <p className="text-xs !text-white text-center">
             © {new Date().getFullYear()} I BACUS TECH SOLUTIONS. All Rights Reserved.
           </p>

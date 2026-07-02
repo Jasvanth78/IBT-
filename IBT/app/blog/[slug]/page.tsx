@@ -1,12 +1,98 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { 
-  FiArrowLeft, FiShare2, FiSearch, FiMail, FiArrowRight, FiEye, FiActivity, FiShield, FiCheckCircle
+  FiArrowLeft, FiShare2, FiMail, FiArrowRight, FiEye, FiActivity, FiShield, FiCheckCircle, FiBookOpen, FiHelpCircle, FiPhone
 } from 'react-icons/fi'
 import { apiClient } from '@/src/api/client'
 import { ShareArticleButton } from './ShareArticleButton'
 import { BlogProgressBar } from './BlogProgressBar'
 import { formatCategoryName } from '@/src/utils/category'
+
+function generateAutoSummary(title: string, htmlContent: string): string[] {
+  const points: string[] = [];
+
+  const stripTags = (html: string) => {
+    return html
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/gi, "'")
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
+
+  // 1. Try to find H2/H3 headings
+  const headingMatches = htmlContent.match(/<h[23][^>]*>(.*?)<\/h[23]>/gi);
+  if (headingMatches) {
+    for (const match of headingMatches) {
+      const text = stripTags(match);
+      if (text && text.length > 5 && text.length < 80) {
+        const cleanText = text.replace(/^\d+[\.\)]\s*/, '').replace(/^[A-Z][\.\)]\s*/, '');
+        if (cleanText) points.push(cleanText);
+      }
+    }
+  }
+
+  // 2. Try to find LI items if we don't have enough headings
+  if (points.length < 4) {
+    const liMatches = htmlContent.match(/<li[^>]*>(.*?)<\/li>/gi);
+    if (liMatches) {
+      for (const match of liMatches) {
+        const text = stripTags(match);
+        if (text && text.length > 5 && text.length < 80) {
+          const cleanText = text.replace(/^\d+[\.\)]\s*/, '').replace(/^[A-Z][\.\)]\s*/, '');
+          if (cleanText && !points.includes(cleanText)) {
+            points.push(cleanText);
+          }
+        }
+      }
+    }
+  }
+
+  // 3. Fallback: Split by sentences from paragraphs
+  if (points.length < 4) {
+    const pMatches = htmlContent.match(/<p[^>]*>(.*?)<\/p>/gi);
+    if (pMatches) {
+      for (const match of pMatches) {
+        const text = stripTags(match);
+        if (text && text.length > 15) {
+          const sentences = text.split(/(?<=[.!?])\s+/);
+          for (const sentence of sentences) {
+            const trimmed = sentence.trim();
+            if (trimmed.length > 10 && trimmed.length < 80) {
+              const cleanText = trimmed.replace(/[.!?]$/, '');
+              if (cleanText && !points.includes(cleanText)) {
+                points.push(cleanText);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 4. Ultimate Fallback: Just return generic key aspects derived from title
+  if (points.length < 4) {
+    const titleWords = title.split(/\s+/).filter(w => w.length > 4);
+    if (titleWords.length >= 3) {
+      points.push(`Understand ${titleWords.slice(0, 3).join(' ')}`);
+      points.push(`Explore key ${titleWords[titleWords.length - 1] || 'concepts'}`);
+      points.push("Implementation strategies");
+      points.push("Best practices and tips");
+    } else {
+      points.push("Key concept overview");
+      points.push("Detailed walkthrough");
+      points.push("Practical applications");
+      points.push("Next steps & recommendations");
+    }
+  }
+
+  // Return exactly 4 to 5 unique points
+  return Array.from(new Set(points)).slice(0, 5);
+}
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -131,9 +217,11 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 {blog.title || 'Designing for Accessibility: A Complete Guide'}
               </h1>
               
-              <p className="text-[17px] sm:text-[19px] text-slate-500 font-medium leading-relaxed max-w-3xl mb-8">
-                {blog.description || getExcerpt(blog.content)}
-              </p>
+              {blog.description && (
+                <p className="text-[17px] sm:text-[19px] text-slate-500 font-medium leading-relaxed max-w-3xl mb-8">
+                  {blog.description}
+                </p>
+              )}
               
               {/* Author and Share Row */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 py-6 border-y border-slate-200/60">
@@ -159,11 +247,11 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             </div>
 
             {/* Featured Image */}
-            <div className="relative w-full h-[200px] sm:h-[300px] rounded-2xl overflow-hidden mb-10 shadow-sm border border-slate-100 bg-slate-50">
+            <div className="relative w-full rounded-2xl overflow-hidden mb-10 shadow-sm border border-slate-100 bg-slate-50 flex items-center justify-center">
               <img 
                 src={imageSrc} 
                 alt={blog.title} 
-                className="w-full h-full object-cover" 
+                className="w-full h-auto max-h-[600px] object-contain" 
               />
             </div>
 
@@ -177,10 +265,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                             [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-2 [&_ol]:mb-6
                             [&_li]:text-slate-600 [&_li]:text-[17px] [&_li]:leading-[1.8]
                             [&_a]:text-[#e63946] [&_a]:font-semibold [&_a]:underline hover:[&_a]:text-red-700
-                            [&_img]:rounded-2xl [&_img]:my-8 [&_img]:shadow-md [&_img]:max-h-[400px] [&_img]:object-cover
+                            [&_img]:rounded-2xl [&_img]:my-8 [&_img]:shadow-md [&_img]:h-auto [&_img]:max-w-full [&_img]:mx-auto [&_img]:block
                             [&_strong]:text-slate-900 [&_strong]:font-bold
                             [&_blockquote]:border-l-4 [&_blockquote]:border-red-500 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-6 [&_blockquote]:text-slate-500
-                            [&_table]:min-w-full [&_table]:border-collapse [&_table]:text-[15px]
+                            [&_table]:min-w-full [&_table]:border-collapse [&_table]:text-[15px] [&_table]:!border-0
                             [&_th]:border-b [&_th]:border-r [&_th]:border-slate-200 last:[&_th]:border-r-0 [&_th]:bg-slate-50/80 [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:font-bold [&_th]:text-[#0f172a]
                             [&_td]:border-b [&_td]:border-r [&_td]:border-slate-200 last:[&_td]:border-r-0 [&_td]:px-4 [&_td]:py-3 [&_td]:text-slate-600 [&_td]:leading-relaxed
                             [&_tr]:border-b [&_tr]:border-slate-200 last:[&_tr]:border-b-0 [&_tr]:hover:bg-slate-50/50"
@@ -190,6 +278,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                      .replace(/\u00a0/g, ' ')
                      .replace(/<table/gi, '<div class="overflow-x-auto overflow-hidden w-full border border-slate-200 rounded-xl my-6"><table')
                      .replace(/<\/table>/gi, '</table></div>')
+                      .replace(/<p([^>]*)>\s*•\s*(.*?)<\/p>/gi, (match, attrs, innerContent) => {
+                        if (attrs.includes('style=')) {
+                          return `<p${attrs.replace(/style=["']/i, 'style="padding-left: 1.25rem; text-indent: -1.25rem; ')}>• ${innerContent}</p>`;
+                        }
+                        return `<p${attrs} style="padding-left: 1.25rem; text-indent: -1.25rem;">• ${innerContent}</p>`;
+                      })
                  }}
                />
             ) : (
@@ -313,7 +407,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   <div className="flex items-center gap-2 text-[12px] font-bold text-[#e63946] uppercase tracking-widest mb-3">
                     <FiArrowLeft className="transition-transform group-hover:-translate-x-1" /> Previous Article
                   </div>
-                  <h4 className="text-[17px] font-bold text-[#0f172a] leading-tight group-hover:text-[#e63946] transition-colors line-clamp-2">
+                  <h4 title={previousArticle.title} className="text-[17px] font-bold text-[#0f172a] leading-tight group-hover:text-[#e63946] transition-colors line-clamp-2">
                     {previousArticle.title}
                   </h4>
                 </Link>
@@ -324,7 +418,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   <div className="flex items-center gap-2 text-[12px] font-bold text-[#e63946] uppercase tracking-widest mb-3">
                     Next Article <FiArrowRight className="transition-transform group-hover:translate-x-1" />
                   </div>
-                  <h4 className="text-[17px] font-bold text-[#0f172a] leading-tight group-hover:text-[#e63946] transition-colors line-clamp-2">
+                  <h4 title={nextArticle.title} className="text-[17px] font-bold text-[#0f172a] leading-tight group-hover:text-[#e63946] transition-colors line-clamp-2">
                     {nextArticle.title}
                   </h4>
                 </Link>
@@ -336,45 +430,122 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           {/* =========================================
               RIGHT COLUMN: SIDEBAR
           ========================================= */}
-          <aside className="w-full space-y-10 hidden lg:block">
-            
-            {/* Search Box */}
-            <div className="relative">
-              <input 
-                type="text" 
-                placeholder="Search articles..." 
-                className="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-[#e63946] transition-all shadow-sm"
-              />
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            </div>
+          <aside className="w-full space-y-6 hidden lg:block lg:sticky lg:top-[6rem] self-start">
 
 
+            {/* 1. Quick Summary Card (Auto Generated) */}
+            {(() => {
+              const summaryPoints = generateAutoSummary(blog.title || '', blog.content || '');
+              return (
+                <div className="bg-white rounded-[18px] p-6 border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300">
+                  <h3 className="text-[18px] font-black text-[#0f172a] mb-4 flex items-center gap-2">
+                    <FiActivity className="text-[#e63946]" size={18} />
+                    Quick Summary
+                  </h3>
+                  <ul className="space-y-3">
+                    {summaryPoints.map((point, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-[13px] text-slate-600 font-medium leading-relaxed">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#e63946] mt-[7px] shrink-0" aria-hidden="true" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })()}
 
-            {/* Recent Posts */}
+            {/* 2. Recent Posts */}
             {recentPosts.length > 0 && (
-              <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                <h3 className="text-[18px] font-black text-[#0f172a] mb-3">Recent Posts</h3>
-                <div className="space-y-6">
+              <div className="bg-white rounded-[18px] p-6 border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300">
+                <h3 className="text-[18px] font-black text-[#0f172a] mb-5">Recent Posts</h3>
+                <div className="space-y-5">
                   {recentPosts.map((post) => (
                     <Link href={`/blog/${post.slug}`} key={post.id} className="group flex gap-4 items-center">
-                      <div className="w-20 h-16 rounded-xl overflow-hidden shrink-0 bg-slate-100">
+                      <div className="w-20 h-16 rounded-xl overflow-hidden shrink-0 bg-slate-100 border border-slate-100">
                         <img 
                           src={resolveImageUrl(post.imageUrl) || 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=200&q=80'} 
                           alt={post.title} 
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                         />
                       </div>
-                      <div>
-                        <h4 className="text-[14px] font-bold text-[#0f172a] leading-snug group-hover:text-[#e63946] transition-colors line-clamp-2 mb-1">
-                          {post.title}
-                        </h4>
-                        <p className="text-[11px] font-medium text-slate-500">{formatPublishedAt(post.publishedAt)}</p>
+                      <div className="relative flex-1 min-w-0">
+                        <div className="group/tooltip relative">
+                          <h4 className="text-[14px] font-bold text-[#0f172a] leading-snug group-hover:text-[#e63946] transition-colors line-clamp-2 mb-1 cursor-pointer">
+                            {post.title}
+                          </h4>
+                          <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 w-64 max-w-[85vw] whitespace-normal rounded-lg bg-white border border-slate-200 px-3 py-2 text-[11px] font-bold tracking-wide text-[#0f172a] opacity-0 scale-95 group-hover/tooltip:opacity-100 group-hover/tooltip:scale-100 transition-all duration-200 z-50 text-center shadow-lg shadow-slate-200/50 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[6px] after:border-transparent after:border-t-white">
+                            {post.title}
+                          </span>
+                        </div>
+                        <p className="text-[11px] font-medium text-slate-400">{formatPublishedAt(post.publishedAt)}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
               </div>
             )}
+
+            {/* 3. Quick Tips (Manual) */}
+            {blog.quickTips && blog.quickTips.length > 0 && (
+              <div className="bg-white rounded-[18px] p-6 border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300">
+                <h3 className="text-[18px] font-black text-[#0f172a] mb-4 flex items-center gap-2">
+                  <span className="text-amber-500 text-lg">💡</span>
+                  Quick Tips
+                </h3>
+                <ul className="space-y-3.5">
+                  {blog.quickTips.map((tip, idx) => (
+                    <li key={idx} className="flex items-start gap-3 text-[13px] text-slate-600 font-medium leading-relaxed">
+                      <span className="text-amber-500 mt-0.5 shrink-0 text-[15px]">💡</span>
+                      <span>{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* 4. Categories */}
+            {categories.length > 0 && (
+              <div className="bg-white rounded-[18px] p-6 border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300">
+                <h3 className="text-[18px] font-black text-[#0f172a] mb-4 flex items-center gap-2">
+                  <FiBookOpen className="text-blue-500" size={18} />
+                  Categories
+                </h3>
+                <div className="space-y-2">
+                  {categories.map((cat) => (
+                    <Link
+                      href={`/blog?category=${encodeURIComponent(cat.name)}`}
+                      key={cat.name}
+                      className="flex items-center justify-between p-3 rounded-xl border border-slate-100 hover:border-[#e63946] hover:bg-red-50/5 transition-all group"
+                    >
+                      <span className="text-[13px] font-bold text-slate-700 group-hover:text-[#e63946] transition-colors capitalize">
+                        {formatCategoryName(cat.name)}
+                      </span>
+                      <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 group-hover:bg-[#e63946] group-hover:text-white transition-all">
+                        {cat.count}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 5. Need Help? CTA Card */}
+            <div className="bg-white rounded-[18px] p-6 border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col gap-4 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-red-50/50 rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform duration-500" />
+              <h3 className="text-[18px] font-black leading-snug tracking-tight text-[#0f172a] flex items-center gap-2">
+                <FiPhone className="text-[#e63946]" size={18} />
+                Need Help?
+              </h3>
+              <p className="text-[12px] text-slate-500 font-medium leading-relaxed">
+                Contact our expert support team to find the best solutions customized for your specific business requirements.
+              </p>
+              <Link
+                href="/contact-us"
+                className="w-full py-2.5 rounded-xl bg-[#e63946] text-white hover:bg-red-600 font-bold text-xs transition-all text-center tracking-wider uppercase shadow-[0_4px_12px_rgba(230,57,70,0.15)] hover:shadow-[0_6px_20px_rgba(230,57,70,0.25)]"
+              >
+                Contact Us
+              </Link>
+            </div>
 
           </aside>
         </div>

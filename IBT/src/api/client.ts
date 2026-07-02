@@ -117,6 +117,7 @@ export type PublicBlog = {
   featured?: boolean;
   category?: string | null;
   publishedAt?: string | null;
+  quickTips?: string[];
 };
 
 export type PublicBranch = {

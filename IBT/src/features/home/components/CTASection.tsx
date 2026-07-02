@@ -49,15 +49,15 @@ export function CTASection() {
 
             {/* Center Content */}
             <div className="text-center md:text-left z-10">
-              <h2 className="font-bold !text-white leading-tight mb-4 !text-center md:!text-left">
+              <h2 className="font-bold !text-white leading-tight  !text-center md:!text-left">
                 Ready to Transform<br />Your Business?
               </h2>
             </div>
 
             {/* Right Content */}
             <div className="text-center md:text-right z-10 flex flex-col items-center md:items-end">
-              <p 
-                className="w-full !text-center md:!text-right pt-4 text-slate-300 text-[13px] md:text-sm mb-5 max-w-xs mx-auto md:mx-0"
+              <p
+                className="w-full !text-center md:!text-right pt-1 text-slate-300 text-[13px] md:text-sm mb-5 max-w-xs mx-auto md:mx-0"
                 style={{ textAlign: 'inherit' }}
               >
                 Let's build something amazing together. Get a free consultation with our experts.

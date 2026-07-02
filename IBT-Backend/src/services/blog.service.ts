@@ -14,6 +14,7 @@ type CreateBlogInput = {
   featured?: boolean;
   category?: string;
   publishedAt?: Date;
+  quickTips?: string[];
 };
 
 type UpdateBlogInput = Partial<{
@@ -25,6 +26,7 @@ type UpdateBlogInput = Partial<{
   featured: boolean;
   category: string;
   publishedAt: Date | null;
+  quickTips: string[];
 }>;
 
 type ListBlogFilters = {
@@ -128,6 +130,7 @@ export const createBlog = async (input: CreateBlogInput, userId?: string) => {
         featured,
         category: normalizeCategory(input.category),
         publishedAt,
+        quickTips: input.quickTips,
       },
     });
 
@@ -247,6 +250,7 @@ export const updateBlog = async (
         featured: input.featured,
         category: input.category !== undefined ? normalizeCategory(input.category) : undefined,
         publishedAt: nextPublishedAt,
+        quickTips: input.quickTips,
       },
     });
 

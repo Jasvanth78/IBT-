@@ -123,13 +123,13 @@ export default async function BlogPage() {
             {featuredPost && (
               <div className="relative z-10 w-full">
                 <Link href={`/blog/${featuredPost.slug}`} className="block group">
-                  <div className="bg-white rounded-3xl overflow-hidden relative shadow-md border border-slate-100 hover:shadow-lg transition-shadow flex flex-col h-[400px]">
+                  <div className="bg-white rounded-3xl overflow-hidden relative shadow-md border border-slate-100 hover:shadow-lg transition-shadow flex flex-col h-auto md:h-[400px]">
                     {featuredPost.imageUrl ? (
-                      <div className="h-[180px] w-full relative overflow-hidden bg-slate-100 shrink-0">
+                      <div className="h-[180px] w-full relative overflow-hidden bg-slate-50 shrink-0">
                         <img
                           src={resolveImageUrl(featuredPost.imageUrl, apiOrigin) || ''}
                           alt={featuredPost.title}
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                          className="w-full h-full object-contain bg-slate-50 transition-transform duration-700 ease-out group-hover:scale-105"
                         />
                         <span className="absolute top-4 left-4 inline-flex items-center px-3 py-1 rounded-full bg-[#e63946] text-white text-[10px] font-black uppercase tracking-widest shadow-sm">
                           FEATURED ARTICLE
@@ -147,7 +147,7 @@ export default async function BlogPage() {
                         <p className="text-[11px] font-bold text-red-500 uppercase tracking-widest mb-2">
                           {formatCategoryName(featuredPost.category) || 'IBT JOURNAL'}
                         </p>
-                        <h2 className="text-[20px] sm:text-[24px] font-black text-[#0f172a] leading-tight mb-2 group-hover:text-[#e63946] transition-colors line-clamp-2">
+                        <h2 className="text-[20px] sm:text-[24px] font-black text-[#0f172a] leading-tight mb-2 group-hover:text-[#e63946] transition-colors">
                           {featuredPost.title}
                         </h2>
                         <p className="text-[13px] text-slate-500 font-medium line-clamp-2">

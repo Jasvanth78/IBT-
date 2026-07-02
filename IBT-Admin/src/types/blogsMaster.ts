@@ -10,6 +10,7 @@ export type BlogMasterItem = {
   featured: boolean
   category: string | null
   publishedAt: string | null
+  quickTips?: string[]
   createdAt: string
   updatedAt: string
 }
@@ -23,6 +24,7 @@ export type BlogMasterPayload = {
   featured?: boolean
   category?: string | null
   publishedAt?: string | null
+  quickTips?: string[]
 }
 
 export type BlogListMeta = {

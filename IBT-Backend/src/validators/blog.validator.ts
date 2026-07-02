@@ -106,6 +106,7 @@ export const createBlogSchema = z
     featured: z.boolean("Featured must be a boolean").optional(),
     category: blogCategorySchema.optional(),
     publishedAt: z.preprocess(parseDate, z.date().optional()),
+    quickTips: z.array(z.string()).optional(),
   })
   .superRefine(validatePublishRules);
 
@@ -119,6 +120,7 @@ export const updateBlogSchema = z
     featured: z.boolean("Featured must be a boolean").optional(),
     category: blogCategorySchema.optional(),
     publishedAt: z.preprocess(parseNullableDate, z.date().nullable().optional()),
+    quickTips: z.array(z.string()).optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field is required",

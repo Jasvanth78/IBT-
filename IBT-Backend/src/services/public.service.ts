@@ -609,6 +609,7 @@ export const getPublicBlogBySlug = async (slug: string) => {
       status: true,
       featured: true,
       publishedAt: true,
+      quickTips: true,
       createdAt: true,
       updatedAt: true,
     },
