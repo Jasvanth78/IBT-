@@ -76,12 +76,22 @@ export function ContactFormClient({ initialSettings, initialBranches }: ContactF
     }
 
     if (!formData.email.trim()) {
-      showToast('Please fill the Work Email field.', 'error')
+      showToast('Please fill the Email field.', 'error')
       return
     }
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     if (!emailRegex.test(formData.email.trim())) {
       showToast('Please enter a valid email address containing "@".', 'error')
+      return
+    }
+
+    if (!formData.phone.trim()) {
+      showToast('Please fill the Phone field.', 'error')
+      return
+    }
+    const phoneDigits = formData.phone.replace(/\D/g, '')
+    if (phoneDigits.length < 10) {
+      showToast('Phone number must contain at least 10 digits.', 'error')
       return
     }
 
@@ -148,7 +158,7 @@ export function ContactFormClient({ initialSettings, initialBranches }: ContactF
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-[#0f172a]">Work Email <span className="text-red-500 ml-1">*</span></label>
+            <label className="text-[11px] font-bold text-[#0f172a]">Email<span className="text-red-500 ml-1">*</span></label>
             <input
               required
               value={formData.email}
@@ -161,12 +171,14 @@ export function ContactFormClient({ initialSettings, initialBranches }: ContactF
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div className="space-y-1.5">
-              <label className="text-[11px] font-bold text-[#0f172a]">Phone (Optional)</label>
+              <label className="text-[11px] font-bold text-[#0f172a]">Phone<span className="text-red-500 ml-1">*</span></label>
               <input
+                required
                 value={formData.phone}
                 onChange={handleChange('phone')}
                 type="tel"
-                maxLength={12}
+                minLength={10}
+                maxLength={15}
                 placeholder="Eg. +91 98765 43210"
                 className="w-full h-11 bg-white border border-slate-200 rounded-lg px-4 text-sm focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-all placeholder:text-slate-400 font-medium"
               />
@@ -192,8 +204,8 @@ export function ContactFormClient({ initialSettings, initialBranches }: ContactF
                   type="button"
                   onClick={() => setInquiryType(type)}
                   className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-all ${inquiryType === type
-                      ? 'bg-[#0f172a] border-[#0f172a] text-white'
-                      : 'bg-[#f8fafc] border-slate-200 text-slate-600 hover:bg-slate-100'
+                    ? 'bg-[#0f172a] border-[#0f172a] text-white'
+                    : 'bg-[#f8fafc] border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
                 >
                   {type}

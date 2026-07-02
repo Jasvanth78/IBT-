@@ -11,6 +11,10 @@ import { formatCategoryName } from '@/src/utils/category'
 function generateAutoSummary(title: string, htmlContent: string): string[] {
   const points: string[] = [];
 
+  if (title && title.trim()) {
+    points.push(title.trim());
+  }
+
   const stripTags = (html: string) => {
     return html
       .replace(/<[^>]*>/g, ' ')
