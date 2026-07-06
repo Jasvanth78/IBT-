@@ -48,9 +48,10 @@ export const submitLabIdea = asyncHandler(async (req: Request, res: Response) =>
     // Fallback order: DB Setting -> MAIL_USER from .env
     const adminEmailRaw = (adminEmailSetting?.value as string) || env.MAIL_USER;
     
+    const { sendAdminLabIdeaNotification, sendUserLabIdeaAutoReply } = await import("../utils/mailer");
+
     if (adminEmailRaw) {
       const adminEmails = adminEmailRaw.split(',').map(e => e.trim()).filter(e => e);
-      const { sendAdminLabIdeaNotification, sendUserLabIdeaAutoReply } = await import("../utils/mailer");
 
       // Run in background so it doesn't block response
       Promise.all(adminEmails.map(email => 
@@ -65,13 +66,13 @@ export const submitLabIdea = asyncHandler(async (req: Request, res: Response) =>
           attachments: attachments,
         }).catch(err => console.error(`Failed to send admin notification to ${email}:`, err))
       ));
-      
-      await sendUserLabIdeaAutoReply({
-        userEmail: labIdea.email,
-        userName: labIdea.firstName,
-        ideaTitle: labIdea.ideaTitle,
-      }).catch(err => console.error(`Failed to send user auto-reply to ${labIdea.email}:`, err));
     }
+    
+    await sendUserLabIdeaAutoReply({
+      userEmail: labIdea.email,
+      userName: labIdea.firstName,
+      ideaTitle: labIdea.ideaTitle,
+    }).catch(err => console.error(`Failed to send user auto-reply to ${labIdea.email}:`, err));
   } catch (error) {
     console.error("Failed to send admin notification or user auto-reply:", error);
   }
