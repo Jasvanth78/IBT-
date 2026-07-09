@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 import { successResponse } from "../utils/apiResponse";
 import { httpError } from "../utils/httpError";
 import { prisma } from "../lib/prisma";
-import { sendOTPEmail, sendAdminInternshipNotification } from "../utils/mailer";
+import { sendOTPEmail, sendAdminInternshipNotification, sendUserInternshipAutoReply } from "../utils/mailer";
 import { z } from "zod";
 import { buildUploadRelativePath, buildUploadAbsoluteUrl } from "../middlewares/multer.middleware";
 import { env } from "../config/env";
@@ -121,6 +121,7 @@ export const submitApplication = asyncHandler(async (req: Request, res: Response
 
   // Notify Admin & User (non-blocking background task)
   (async () => {
+    // 1. Notify Admin
     try {
       const adminEmailSetting = await prisma.setting.findUnique({
         where: { key: SETTINGS.ADMIN_NOTIFICATION_EMAIL }
@@ -150,16 +151,19 @@ export const submitApplication = asyncHandler(async (req: Request, res: Response
       } else {
         console.error("No admin email found in settings or ENV!");
       }
+    } catch (error) {
+      console.error("Failed to send admin notification:", error);
+    }
 
-      const { sendUserInternshipAutoReply } = await import("../utils/mailer");
+    // 2. Send User Auto-Reply (Thank You Email)
+    try {
       await sendUserInternshipAutoReply({
         userEmail: application.email,
         userName: application.name,
         applicationType: application.applicationType,
-      }).catch(err => console.error(`Failed to send user auto-reply to ${application.email}:`, err));
-
+      });
     } catch (error) {
-      console.error("Failed to send admin notification or user auto-reply:", error);
+      console.error(`Failed to send user auto-reply to ${application.email}:`, error);
     }
   })();
 

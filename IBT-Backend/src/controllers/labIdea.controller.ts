@@ -7,6 +7,7 @@ import { buildUploadRelativePath, buildUploadAbsoluteUrl } from "../middlewares/
 import { env } from "../config/env";
 import { SETTINGS } from "../types/settings";
 import { createLabIdeaSchema, updateLabIdeaStatusSchema, listLabIdeasQuerySchema } from "../validators/labIdea.validator";
+import { sendAdminLabIdeaNotification, sendUserLabIdeaAutoReply } from "../utils/mailer";
 
 export const submitLabIdea = asyncHandler(async (req: Request, res: Response) => {
   // Parse body, but need to handle privacyAccepted which might come as string from FormData
@@ -41,6 +42,7 @@ export const submitLabIdea = asyncHandler(async (req: Request, res: Response) =>
 
   // Notify Admin & User (non-blocking background task)
   (async () => {
+    // 1. Notify Admin
     try {
       const adminEmailSetting = await prisma.setting.findUnique({
         where: { key: SETTINGS.ADMIN_NOTIFICATION_EMAIL }
@@ -49,8 +51,6 @@ export const submitLabIdea = asyncHandler(async (req: Request, res: Response) =>
       // Fallback order: DB Setting -> MAIL_USER from .env
       const adminEmailRaw = (adminEmailSetting?.value as string) || env.MAIL_USER;
       
-      const { sendAdminLabIdeaNotification, sendUserLabIdeaAutoReply } = await import("../utils/mailer");
-
       if (adminEmailRaw) {
         const adminEmails = adminEmailRaw.split(',').map(e => e.trim()).filter(e => e);
 
@@ -67,14 +67,19 @@ export const submitLabIdea = asyncHandler(async (req: Request, res: Response) =>
           }).catch(err => console.error(`Failed to send admin notification to ${email}:`, err))
         ));
       }
-      
+    } catch (error) {
+      console.error("Failed to send admin notification:", error);
+    }
+
+    // 2. Send User Auto-Reply (Thank You Email)
+    try {
       await sendUserLabIdeaAutoReply({
         userEmail: labIdea.email,
         userName: labIdea.firstName,
         ideaTitle: labIdea.ideaTitle,
-      }).catch(err => console.error(`Failed to send user auto-reply to ${labIdea.email}:`, err));
+      });
     } catch (error) {
-      console.error("Failed to send admin notification or user auto-reply:", error);
+      console.error(`Failed to send user auto-reply to ${labIdea.email}:`, error);
     }
   })();
 
