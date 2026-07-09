@@ -24,7 +24,7 @@ export const getTransporter = async () => {
   const pass = (settingsMap.get(SETTINGS.SMTP_PASS) as string) || process.env.EMAIL_PASSWORD;
 
   if (host && user && pass) {
-    return nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       host,
       port: Number(portStr) || 587,
       secure: Number(portStr) === 465,
@@ -32,7 +32,104 @@ export const getTransporter = async () => {
         user,
         pass,
       },
+      connectionTimeout: 10000, // 10 seconds timeout
+      greetingTimeout: 10000,
     });
+
+    // If using ZeptoMail, intercept SMTP calls and send via HTTP API to avoid port blocks on Render Free Tier
+    if (host.toLowerCase().includes("zeptomail")) {
+      const originalSendMail = transporter.sendMail.bind(transporter);
+      
+      const parseEmail = (emailStr: string) => {
+        const match = emailStr.match(/^(?:"?([^"]*)"?\s)?(?:<([^>]+)>)$/);
+        if (match) {
+          return {
+            address: match[2].trim(),
+            name: (match[1] || match[2].split("@")[0]).trim()
+          };
+        }
+        return {
+          address: emailStr.trim(),
+          name: emailStr.split("@")[0].trim()
+        };
+      };
+
+      transporter.sendMail = (async (mailOptions: any, callback?: any) => {
+        try {
+          console.log("ZeptoMail detected. Intercepting and sending via HTTPS API...");
+
+          const parsedFrom = parseEmail(mailOptions.from);
+          const toEmails = Array.isArray(mailOptions.to) ? mailOptions.to : [mailOptions.to];
+          const formattedTo = toEmails.map((email: string) => {
+            const parsed = parseEmail(email);
+            return {
+              email_address: {
+                address: parsed.address,
+                name: parsed.name
+              }
+            };
+          });
+
+          const payload: any = {
+            from: {
+              address: parsedFrom.address,
+              name: parsedFrom.name || "IBT"
+            },
+            to: formattedTo,
+            subject: mailOptions.subject,
+            htmlbody: mailOptions.html,
+          };
+
+          if (mailOptions.bcc) {
+            const bccEmails = Array.isArray(mailOptions.bcc) ? mailOptions.bcc : [mailOptions.bcc];
+            payload.bcc = bccEmails.map((email: string) => {
+              const parsed = parseEmail(email);
+              return {
+                email_address: {
+                  address: parsed.address,
+                  name: parsed.name
+                }
+              };
+            });
+          }
+
+          const authHeader = pass.startsWith("Zoho-enczapikey") 
+            ? pass 
+            : `Zoho-enczapikey ${pass}`;
+
+          const res = await fetch("https://api.zeptomail.in/v1.1/email", {
+            method: "POST",
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+              "Authorization": authHeader
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`ZeptoMail HTTP API returned status ${res.status}: ${errText}`);
+          }
+
+          const responseData = await res.json();
+          console.log("ZeptoMail HTTP API Response:", responseData);
+
+          const result = {
+            messageId: responseData.request_id || "zeptomail-http-success",
+            response: "250 OK",
+          };
+
+          if (callback) callback(null, result);
+          return result;
+        } catch (err: any) {
+          console.error("ZeptoMail HTTPS API failed, falling back to SMTP:", err.message);
+          return originalSendMail(mailOptions, callback);
+        }
+      }) as any;
+    }
+
+    return transporter;
   }
 
   // Generate test SMTP service account from ethereal.email for local dev/testing
