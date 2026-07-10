@@ -215,10 +215,10 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
           </AnimatePresence>
         </div>
 
-        {/* RIGHT COLUMN: Sidebar */}
+      
         <div className="w-full flex flex-col gap-8 lg:sticky lg:top-[6rem] self-start">
 
-          {/* Popular Posts Widget */}
+      
           <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
             <h4 className="text-[16px] font-black text-[#0f172a] mb-3 pb-4 border-b border-slate-50">Popular Posts</h4>
             <div className="flex flex-col gap-6">

@@ -1,9 +1,9 @@
 import { prisma } from './src/lib/prisma';
 
 async function main() {
-  const settings = await prisma.siteSettings.findFirst();
+  const settings = await prisma.setting.findUnique({ where: { key: 'contact_branches' } });
   console.log("Contact Branches:");
-  console.log(JSON.stringify(settings?.contactBranches, null, 2));
+  console.log(JSON.stringify(settings?.value, null, 2));
 
   const branches = await prisma.branch.findMany();
   console.log("\nBranches Table:");
