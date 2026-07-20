@@ -4,6 +4,7 @@ import "./globals.css";
 import { SocketSettingsProvider } from "@/src/providers/SocketSettingsProvider";
 import { MaintenanceOverlay, SiteFooter, SiteNavbar, WhatsappButton } from "@/src/features/layout/components";
 import type { SiteSettingsRealtimePayload } from "@/src/types/socket";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -88,6 +89,7 @@ export default async function RootLayout({
             <WhatsappButton />
           </MaintenanceOverlay>
         </SocketSettingsProvider>
+        <GoogleAnalytics gaId="G-5T4077FZ2" />
       </body>
     </html>
   );

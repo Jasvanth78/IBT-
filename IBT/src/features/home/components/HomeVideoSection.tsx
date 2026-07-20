@@ -23,8 +23,7 @@ export function HomeVideoSection() {
   useEffect(() => {
     if (homeVideoEnabled && homeVideoUrl && youtubeId) {
       // Load YouTube SDK if not present
-      // @ts-expect-error
-      if (!window.YT) {
+      if (!(window as any).YT) {
         const tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
         const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -33,8 +32,7 @@ export function HomeVideoSection() {
 
       // Check periodically for YT object and element
       const checkYT = setInterval(() => {
-        // @ts-expect-error
-        if (window.YT && window.YT.Player && document.getElementById('youtube-player-section')) {
+        if ((window as any).YT && (window as any).YT.Player && document.getElementById('youtube-player-section')) {
           initYouTubePlayer();
           clearInterval(checkYT);
         }
@@ -47,8 +45,7 @@ export function HomeVideoSection() {
   function initYouTubePlayer() {
     if (youtubePlayerRef.current) return;
     
-    // @ts-expect-error
-    youtubePlayerRef.current = new window.YT.Player('youtube-player-section', {
+    youtubePlayerRef.current = new (window as any).YT.Player('youtube-player-section', {
       events: {
         onReady: (event: any) => {
           console.log('YouTube Player Ready');
@@ -57,8 +54,7 @@ export function HomeVideoSection() {
         },
         onStateChange: (event: any) => {
           // Ensure it keeps playing if it gets paused by the browser
-          // @ts-expect-error
-          if (event.data === window.YT.PlayerState.PAUSED) {
+          if (event.data === (window as any).YT.PlayerState.PAUSED) {
             event.target.playVideo();
           }
         }

@@ -65,10 +65,6 @@ export function RecentWorkSection() {
     }
   }
 
-  if (loading && projects === fallbackProjects) {
-    return null; // Avoid flashing fallback if real data is loading
-  }
-
   const checkScroll = useCallback(() => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
@@ -82,6 +78,10 @@ export function RecentWorkSection() {
     window.addEventListener('resize', checkScroll);
     return () => window.removeEventListener('resize', checkScroll);
   }, [checkScroll, projects.length]);
+
+  if (loading && projects === fallbackProjects) {
+    return null; // Avoid flashing fallback if real data is loading
+  }
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
