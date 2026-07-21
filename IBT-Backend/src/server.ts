@@ -5,7 +5,7 @@ import path from "node:path";
 import { errorMiddleware } from "./middlewares/error.middleware";
 import { createAppServer, initSocketServer } from "./realtime/socket";
 
-// Routes
+
 import authRoutes from "./routes/auth.routes";
 import settingRoutes from "./routes/setting.routes";
 import serviceRoutes from "./routes/service.routes";

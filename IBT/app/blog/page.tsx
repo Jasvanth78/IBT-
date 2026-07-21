@@ -173,13 +173,11 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      {/* =====================================================
-          MAIN BLOG LISTING (Client Component)
-      ===================================================== */}
+   
       <div className="mx-auto max-w-[1300px] px-4 pt-12 pb-20 sm:px-6 lg:px-8">
         <BlogList initialBlogs={items} apiOrigin={apiOrigin} />
       </div>
-
+//
     </div>
   )
 }

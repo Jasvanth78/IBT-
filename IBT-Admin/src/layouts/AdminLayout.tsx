@@ -12,7 +12,7 @@ export function AdminLayout() {
   const [locked, setLocked] = useState(false)
   const sidebarRef = useRef<HTMLDivElement>(null)
 
-  // Show expanded sidebar if hovered and not locked, or if locked
+
   const sidebarExpanded = locked || hovered
 
   useEffect(() => {
