@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { FiImage, FiTrash2, FiUpload } from 'react-icons/fi'
+import { FiImage, FiTrash2, FiUpload, FiAlertTriangle } from 'react-icons/fi'
 import { getAbsoluteImageUrl } from '../../../utils/image'
 
 type ImageUploadFieldProps = {
@@ -9,6 +9,7 @@ type ImageUploadFieldProps = {
   previewAlt: string
   helperText?: string
   emptyText?: string
+  maxSizeMB?: number
   onRemove?: () => void
   onFileChange: (file: File | null) => void
 }
@@ -20,11 +21,13 @@ export function ImageUploadField({
   previewAlt,
   helperText,
   emptyText = 'Choose an image file or drag it here',
+  maxSizeMB = 20,
   onRemove,
   onFileChange,
 }: ImageUploadFieldProps) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [isDragging, setIsDragging] = useState(false)
+  const [fileError, setFileError] = useState<string | null>(null)
 
   const selectedImageUrl = useMemo(() => {
     if (!selectedFile) {
@@ -48,7 +51,41 @@ export function ImageUploadField({
     inputRef.current?.click()
   }
 
+  const validateAndSelectFile = (file: File | null) => {
+    if (!file) {
+      setFileError(null)
+      onFileChange(null)
+      return
+    }
+
+    // Validate image format by MIME type or file extension (handles Windows registry edge cases)
+    const hasImageExtension = /\.(jpg|jpeg|png|webp|gif|svg|bmp|ico)$/i.test(file.name)
+    const isImageType = file.type ? file.type.toLowerCase().startsWith('image/') : hasImageExtension
+
+    if (!isImageType && !hasImageExtension) {
+      setFileError('Invalid file format. Please upload an image file (PNG, JPG, WEBP, GIF, SVG).')
+      if (inputRef.current) inputRef.current.value = ''
+      onFileChange(null)
+      return
+    }
+
+    // Validate image file size / limit
+    const maxBytes = maxSizeMB * 1024 * 1024
+    if (file.size > maxBytes) {
+      const selectedMB = (file.size / (1024 * 1024)).toFixed(2)
+      setFileError(`File size (${selectedMB} MB) exceeds maximum allowed limit of ${maxSizeMB} MB. Please upload a compressed image.`)
+      if (inputRef.current) inputRef.current.value = ''
+      onFileChange(null)
+      return
+    }
+
+    setFileError(null)
+    onFileChange(file)
+  }
+
   const handleRemove = () => {
+    setFileError(null)
+    if (inputRef.current) inputRef.current.value = ''
     onFileChange(null)
     onRemove?.()
   }
@@ -71,16 +108,19 @@ export function ImageUploadField({
     setIsDragging(false)
 
     const file = e.dataTransfer.files?.[0] ?? null
-    if (file && file.type.startsWith('image/')) {
-      onFileChange(file)
-    }
+    validateAndSelectFile(file)
   }
 
   return (
     <div className="grid gap-2">
-      <span className="text-sm font-semibold text-[var(--ui-text)]">{label}</span>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="text-sm font-semibold text-[var(--ui-text)]">{label}</span>
+        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-600">
+          Max quality / limit: <strong className="text-slate-800 font-bold">{maxSizeMB} MB</strong> (JPG, PNG, WEBP)
+        </span>
+      </div>
 
-      <div className={`overflow-hidden rounded-xl border transition-all ${isDragging ? 'border-[var(--ui-primary)] ring-2 ring-[var(--ui-primary)]/20 bg-blue-50/10' : 'border-[var(--ui-border)] bg-white'}`}>
+      <div className={`overflow-hidden rounded-xl border transition-all ${fileError ? 'border-red-400 ring-2 ring-red-400/20 bg-red-50/10' : isDragging ? 'border-[var(--ui-primary)] ring-2 ring-[var(--ui-primary)]/20 bg-blue-50/10' : 'border-[var(--ui-border)] bg-white'}`}>
         <button
           type="button"
           className={`relative block h-52 w-full overflow-hidden text-left transition-colors ${isDragging ? 'bg-[var(--ui-primary)]/5' : 'bg-[var(--ui-surface-muted)]'}`}
@@ -90,7 +130,6 @@ export function ImageUploadField({
           onDrop={handleDrop}
         >
           {previewUrl ? (
-            /* CHANGED: object-cover to object-contain, added p-2 for breathing room */
             <img src={previewUrl} alt={previewAlt} className="h-full w-full object-contain p-2 max-w-md mx-auto pointer-events-none" />
           ) : (
             <div className="grid h-full place-items-center text-[var(--ui-muted)] pointer-events-none">
@@ -115,7 +154,7 @@ export function ImageUploadField({
           className="hidden"
           onChange={(event) => {
             const file = event.target.files?.[0] ?? null
-            onFileChange(file)
+            validateAndSelectFile(file)
           }}
         />
 
@@ -148,7 +187,14 @@ export function ImageUploadField({
         </div>
       </div>
 
-      {helperText ? <p className="text-xs text-[var(--ui-muted)]">{helperText}</p> : null}
+      {fileError ? (
+        <div className="flex items-start gap-2 p-3 rounded-lg border border-red-200 bg-red-50 text-red-700 text-xs font-medium">
+          <FiAlertTriangle className="shrink-0 mt-0.5 text-red-600" size={15} />
+          <span>{fileError}</span>
+        </div>
+      ) : helperText ? (
+        <p className="text-xs text-[var(--ui-muted)]">{helperText}</p>
+      ) : null}
     </div>
   )
 }

@@ -440,7 +440,8 @@ export function BlogFormPage() {
                     selectedFile={selectedImageFile}
                     existingImageUrl={formValues.imageUrl}
                     previewAlt="Blog cover preview"
-                    helperText="Optional image for blog listing/details"
+                    helperText="Optional image for blog listing/details (Max 20MB)"
+                    maxSizeMB={20}
                     onRemove={() => {
                       setSelectedImageFile(null)
                       setFieldValue('imageUrl', '')
