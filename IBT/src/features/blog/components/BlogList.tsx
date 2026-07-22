@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiSearch, FiCalendar, FiMail, FiGrid, FiPhone } from 'react-icons/fi';
 import { type PublicBlog } from '@/src/api/client';
@@ -16,14 +17,54 @@ type BlogListProps = {
 const POSTS_PER_PAGE = 4;
 
 export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const categoryParam = searchParams.get('category');
+
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Posts');
   const [currentPage, setCurrentPage] = useState(1);
 
+  const categories = useMemo(() => {
+    const cats = new Set(initialBlogs.map(b => b.category).filter(Boolean));
+    return ['All Posts', ...Array.from(cats)];
+  }, [initialBlogs]);
+
+  // Sync state with URL search param and scroll into view
+  useEffect(() => {
+    if (categoryParam) {
+      const matched = categories.find(
+        cat => typeof cat === 'string' && cat.toLowerCase() === categoryParam.toLowerCase()
+      );
+      if (matched) {
+        setSelectedCategory(matched as string);
+      } else {
+        setSelectedCategory(categoryParam);
+      }
+
+      // Smooth scroll to articles section
+      const timer = setTimeout(() => {
+        const section = document.getElementById('articles-section');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    } else {
+      setSelectedCategory('All Posts');
+    }
+  }, [categoryParam, categories]);
+
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (category === 'All Posts') {
+      router.push('/blog#articles-section', { scroll: false });
+    } else {
+      router.push(`/blog?category=${encodeURIComponent(category)}#articles-section`, { scroll: false });
+    }
+    const section = document.getElementById('articles-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -31,11 +72,6 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
   useEffect(() => {
     setCurrentPage(1);
   }, [search, selectedCategory]);
-
-  const categories = useMemo(() => {
-    const cats = new Set(initialBlogs.map(b => b.category).filter(Boolean));
-    return ['All Posts', ...Array.from(cats)];
-  }, [initialBlogs]);
 
   const resolveImageUrl = (imageUrl?: string | null) => {
     if (!imageUrl?.trim()) return null;
@@ -62,14 +98,16 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
   };
 
   const filteredBlogs = useMemo(() => {
-    // Exclude the featured article from the main listing grid to avoid duplication
+    // Exclude the featured article from the default "All Posts" listing to avoid duplicate display
     const featured = initialBlogs.find(blog => blog.featured);
     return initialBlogs.filter(blog => {
-      if (featured && blog.id === featured.id) return false;
       const matchesSearch = blog.title.toLowerCase().includes(search.toLowerCase()) ||
         (blog.description || '').toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = selectedCategory === 'All Posts' || blog.category === selectedCategory;
-      return matchesSearch && matchesCategory;
+      const matchesCategory = selectedCategory === 'All Posts' ||
+        (blog.category && blog.category.toLowerCase() === selectedCategory.toLowerCase());
+      if (!matchesSearch || !matchesCategory) return false;
+      if (featured && blog.id === featured.id && selectedCategory === 'All Posts') return false;
+      return true;
     });
   }, [initialBlogs, search, selectedCategory]);
 
@@ -92,7 +130,7 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
   }, [initialBlogs]);
 
   return (
-    <div className="space-y-12">
+    <div id="articles-section" className="space-y-12 scroll-mt-28">
 
       {/* =====================================================
           TOP BAR (Filters & Search)
@@ -101,18 +139,22 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
 
         {/* Categories List */}
         <div className="flex flex-nowrap gap-2 sm:gap-4 items-center overflow-x-auto pb-2 sm:pb-0 scrollbar-hide w-full lg:w-auto">
-          {categories.map(cat => (
-            <button
-              key={cat as string}
-              onClick={() => handleCategoryChange(cat as string)}
-              className={`whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-lg text-[13px] font-bold transition-all duration-300 ${selectedCategory === cat
-                ? 'bg-[#e63946] text-white shadow-md shadow-red-500/20'
-                : 'bg-transparent text-slate-600 hover:text-[#0f172a] hover:bg-slate-100'
-                }`}
-            >
-              {formatCategoryName(cat as string)}
-            </button>
-          ))}
+          {categories.map(cat => {
+            const catStr = cat as string;
+            const isActive = selectedCategory.toLowerCase() === catStr.toLowerCase();
+            return (
+              <button
+                key={catStr}
+                onClick={() => handleCategoryChange(catStr)}
+                className={`whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-lg text-[13px] font-bold transition-all duration-300 ${isActive
+                  ? 'bg-[#e63946] text-white shadow-md shadow-red-500/20'
+                  : 'bg-transparent text-slate-600 hover:text-[#0f172a] hover:bg-slate-100'
+                  }`}
+              >
+                {formatCategoryName(catStr)}
+              </button>
+            );
+          })}
         </div>
 
         {/* Search Input */}
@@ -218,7 +260,7 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
       
         <div className="w-full flex flex-col gap-8 lg:sticky lg:top-[6rem] self-start">
 
-      
+                {/* Popular Posts */}
           <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm">
             <h4 className="text-[16px] font-black text-[#0f172a] mb-3 pb-4 border-b border-slate-50">Popular Posts</h4>
             <div className="flex flex-col gap-6">

@@ -203,9 +203,18 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             
             {/* Header Section */}
             <div className="mb-10">
-              <span className="inline-block px-3 py-1 rounded-md bg-blue-50 border border-blue-100 text-blue-600 text-[10px] font-black uppercase tracking-[0.15em] mb-6">
-                {formatCategoryName(blog.category) || 'SECURITY'}
-              </span>
+              {blog.category ? (
+                <Link
+                  href={`/blog?category=${encodeURIComponent(blog.category)}#articles-section`}
+                  className="inline-block px-3 py-1 rounded-md bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-100 hover:text-blue-700 text-[10px] font-black uppercase tracking-[0.15em] mb-6 transition-colors"
+                >
+                  {formatCategoryName(blog.category)}
+                </Link>
+              ) : (
+                <span className="inline-block px-3 py-1 rounded-md bg-blue-50 border border-blue-100 text-blue-600 text-[10px] font-black uppercase tracking-[0.15em] mb-6">
+                  SECURITY
+                </span>
+              )}
               
               <h1 className="text-[36px] sm:text-[44px] lg:text-[52px] font-black text-[#0f172a] leading-[1.1] mb-6 tracking-tight">
                 {blog.title || 'Designing for Accessibility: A Complete Guide'}
@@ -507,7 +516,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 <div className="space-y-2">
                   {categories.map((cat) => (
                     <Link
-                      href={`/blog?category=${encodeURIComponent(cat.name)}`}
+                      href={`/blog?category=${encodeURIComponent(cat.name)}#articles-section`}
                       key={cat.name}
                       className="flex items-center justify-between p-3 rounded-xl border border-slate-100 hover:border-[#e63946] hover:bg-red-50/5 transition-all group"
                     >

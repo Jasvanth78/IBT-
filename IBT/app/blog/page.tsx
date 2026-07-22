@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { apiClient } from '@/src/api/client'
 import { BlogList } from '@/src/features/blog/components/BlogList'
 import { FiArrowRight, FiFileText, FiGrid, FiUsers } from 'react-icons/fi'
@@ -175,7 +176,11 @@ export default async function BlogPage() {
 
    
       <div className="mx-auto max-w-[1300px] px-4 pt-12 pb-20 sm:px-6 lg:px-8">
-        <BlogList initialBlogs={items} apiOrigin={apiOrigin} />
+        <Suspense fallback={
+          <div className="py-20 text-center text-slate-400 font-medium">Loading articles...</div>
+        }>
+          <BlogList initialBlogs={items} apiOrigin={apiOrigin} />
+        </Suspense>
       </div>
 //
     </div>
