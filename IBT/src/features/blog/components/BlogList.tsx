@@ -98,16 +98,12 @@ export function BlogList({ initialBlogs, apiOrigin }: BlogListProps) {
   };
 
   const filteredBlogs = useMemo(() => {
-    // Exclude the featured article from the default "All Posts" listing to avoid duplicate display
-    const featured = initialBlogs.find(blog => blog.featured);
     return initialBlogs.filter(blog => {
       const matchesSearch = blog.title.toLowerCase().includes(search.toLowerCase()) ||
         (blog.description || '').toLowerCase().includes(search.toLowerCase());
       const matchesCategory = selectedCategory === 'All Posts' ||
         (blog.category && blog.category.toLowerCase() === selectedCategory.toLowerCase());
-      if (!matchesSearch || !matchesCategory) return false;
-      if (featured && blog.id === featured.id && selectedCategory === 'All Posts') return false;
-      return true;
+      return matchesSearch && matchesCategory;
     });
   }, [initialBlogs, search, selectedCategory]);
 
