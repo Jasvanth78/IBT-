@@ -171,7 +171,7 @@ class ApiClient {
   }
 
   private normalizeBaseUrl(value: string | undefined): string {
-    const fallback = 'http://localhost:5000';
+    const fallback = 'http://localhost:5001';
 
     if (!value?.trim()) {
       return fallback;

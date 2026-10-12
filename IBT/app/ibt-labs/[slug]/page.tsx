@@ -10,7 +10,7 @@ type LabDetailPageProps = {
 }
 
 const resolveApiOrigin = (value: string | undefined) => {
-  const fallback = 'http://localhost:5000'
+  const fallback = 'http://localhost:5001'
   if (!value?.trim()) return fallback
   const withProtocol = /^https?:\/\//i.test(value.trim()) ? value.trim() : `http://${value.trim()}`
   try { return new URL(withProtocol).origin } catch { return fallback }

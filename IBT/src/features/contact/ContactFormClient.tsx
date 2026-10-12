@@ -5,11 +5,12 @@ import { motion } from 'framer-motion'
 import { apiClient, type PublicBranch } from '@/src/api/client'
 import { Toast } from '@/src/components/Toast'
 
-type InquiryType = 'Partnership' | 'Internship' | 'IBT Labs' | 'General'
+type InquiryType = 'Partnership' | 'Internship' | 'IBT Labs' | 'General' | 'LCA Demo Request'
 
 type ContactFormClientProps = {
   initialSettings: any
   initialBranches: PublicBranch[]
+  initialInquiryType?: InquiryType
 }
 
 type FormState = {
@@ -21,14 +22,14 @@ type FormState = {
   message: string
 }
 
-export function ContactFormClient({ initialSettings, initialBranches }: ContactFormClientProps) {
+export function ContactFormClient({ initialSettings, initialBranches, initialInquiryType = 'IBT Labs' }: ContactFormClientProps) {
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [toast, setToast] = useState({ open: false, message: '', variant: 'success' as 'success' | 'error' })
   const showToast = (message: string, variant: 'success' | 'error' = 'success') => {
     setToast({ open: true, message, variant })
   }
-  const [inquiryType, setInquiryType] = useState<InquiryType>('IBT Labs')
+  const [inquiryType, setInquiryType] = useState<InquiryType>(initialInquiryType)
   const [formData, setFormData] = useState<FormState>({
     firstName: '',
     lastName: '',
@@ -195,10 +196,11 @@ export function ContactFormClient({ initialSettings, initialBranches }: ContactF
           <div className="space-y-2 pt-2">
             <label className="text-[11px] font-bold text-[#0f172a] block">Inquiry Type</label>
             <div className="flex flex-wrap gap-2">
-              {(['Partnership', 'Internship', 'IBT Labs', 'General'] as InquiryType[]).map((type) => (
+              {(['Partnership', 'Internship', 'IBT Labs', 'General', 'LCA Demo Request'] as InquiryType[]).map((type) => (
                 <button
                   key={type}
                   type="button"
+                  aria-pressed={inquiryType === type}
                   onClick={() => setInquiryType(type)}
                   className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-all ${inquiryType === type
                     ? 'bg-[#0f172a] border-[#0f172a] text-white'

@@ -42,7 +42,7 @@ export type PublicContact = {
 };
 
 const normalizeApiBaseUrl = (value: string | undefined) => {
-  const fallback = 'http://localhost:5000';
+  const fallback = 'http://localhost:5001';
 
   if (!value?.trim()) {
     return fallback;

@@ -1,0 +1,78 @@
+.page {
+  /* Every section fades into the same canvas at its boundary. */
+  background: #f5fcf8;
+}
+
+@media (min-width: 768px) {
+  .lifecycle {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+  .lifecycleHeader {
+    margin-bottom: 12px;
+  }
+  .lifecycleHeader h2 {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .lifecycleHeader p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .lifecycleDiagram {
+    zoom: 0.62;
+    margin-top: 0;
+  }
+  .lifecycleMetrics {
+    margin-top: 12px;
+  }
+  .lifecycleMetrics > div {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    gap: 40px;
+  }
+  .lifecycleMetrics > div > div {
+    gap: 5px;
+  }
+  .lifecycleMetrics svg {
+    width: 26px;
+    height: 26px;
+  }
+  .lifecycleMetrics span {
+    font-size: 13px;
+  }
+}
+
+.page > section {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 24px, #000 calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 24px, #000 calc(100% - 40px), transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.page > section:first-child {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 40px), transparent 100%);
+}
+
+.page > section:last-child {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 24px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 24px);
+}
+
+@media (max-width: 700px) {
+  .page > section {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 28px), transparent 100%);
+  }
+
+  .page > section:first-child {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 28px), transparent 100%);
+  }
+
+  .page > section:last-child {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 16px);
+  }
+}

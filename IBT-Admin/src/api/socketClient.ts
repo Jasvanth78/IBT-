@@ -3,7 +3,7 @@ import { SOCKET_CHANNELS, SOCKET_EVENTS, type SiteSettingsRealtimePayload } from
 
 type SiteSettingsListener = (payload: SiteSettingsRealtimePayload) => void
 
-const SOCKET_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5000'
+const SOCKET_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5001'
 
 let socketInstance: Socket | null = null
 let connectionReadyHandler: ((payload: { socketId: string; timestamp: string }) => void) | null = null

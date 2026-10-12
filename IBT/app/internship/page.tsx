@@ -62,7 +62,7 @@ type SiteSettingsPayload = {
 }
 
 function normalizeApiBaseUrl(raw: string | undefined) {
-  const fallback = 'http://localhost:5000'
+  const fallback = 'http://localhost:5001'
   if (!raw?.trim()) return fallback
   const trimmed = raw.trim()
   const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `http://${trimmed}`

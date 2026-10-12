@@ -8,7 +8,7 @@ import { formatAddress } from '@/src/utils/address'
 
 export const dynamic = 'force-dynamic'
 
-type Props = {}
+type Props = { searchParams: Promise<{ inquiry?: string | string[] }> }
 
 const stripHtmlTags = (value?: string | null) => {
   if (!value) return null
@@ -18,7 +18,9 @@ const stripHtmlTags = (value?: string | null) => {
     .trim() || null
 }
 
-export default async function ContactPage(_: Props) {
+export default async function ContactPage({ searchParams }: Props) {
+  const query = await searchParams
+  const initialInquiryType = query.inquiry === 'lca-demo' ? 'LCA Demo Request' : 'IBT Labs'
   // Server-side fetch of settings and branches
   const settings = (await fetchSiteSettings().catch(() => ({} as SiteSettingsRealtimePayload))) as SiteSettingsRealtimePayload
   const branches = await apiClient.getBranches(1, 10).then((r) => r.items).catch(() => [] as PublicBranch[])
@@ -118,7 +120,7 @@ export default async function ContactPage(_: Props) {
           <div className="lg:col-span-7 w-full bg-white rounded-3xl border border-slate-100 shadow-2xl p-1 sm:p-2">
             <Suspense fallback={<div className="py-20 text-center text-sm font-medium text-slate-400">Loading interactive interface…</div>}>
               {/* @ts-ignore server -> client prop passing explicitly allowed */}
-              <ContactFormClient initialSettings={settings} initialBranches={branches} />
+              <ContactFormClient key={initialInquiryType} initialSettings={settings} initialBranches={branches} initialInquiryType={initialInquiryType} />
             </Suspense>
           </div>
         </div>
