@@ -3,10 +3,12 @@ import type { AuthUser } from '../../types/auth'
 export const AUTH_TOKEN_KEY = 'ibt_auth_token'
 export const AUTH_USER_KEY = 'ibt_auth_user'
 
+// Gets the authentication token from local storage
 export function getAuthToken() {
   return window.localStorage.getItem(AUTH_TOKEN_KEY)
 }
 
+// Gets the authenticated user from local storage
 export function getAuthUser(): AuthUser | null {
   const value = window.localStorage.getItem(AUTH_USER_KEY)
 

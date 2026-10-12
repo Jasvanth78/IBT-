@@ -1,0 +1,33 @@
+.section{background:radial-gradient(ellipse at 73% 50%,#e7f9ef,#f9fdfb 65%);color:#183350;font-family:Arial,Helvetica,sans-serif}.inner{max-width:1500px;margin:auto;padding:35px 32px;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.25fr);gap:35px;align-items:center;min-height:560px}.badge{display:inline-flex;align-items:center;gap:9px;padding:8px 14px;border-radius:24px;background:#e6f7ee;font-size:12px;font-weight:700;color:#176b45;margin-bottom:18px}.badge svg{width:14px;height:14px}.copy h2{font-family:Georgia,'Times New Roman',serif;font-size:40px;line-height:1.12;font-weight:800;letter-spacing:-.8px;margin:0 0 18px}.copy h2 span{color:#168a52}.copy>p{font-size:16px;line-height:1.6;color:#536779;margin:0 0 25px}.metrics{display:flex;justify-content:space-between;gap:12px;border:1px solid #dceee3;border-radius:16px;background:#ffffffc9;padding:18px 20px}.metrics>div{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px;font-weight:700}.metrics svg{width:25px;height:25px;color:#168a52}.diagram{position:relative;height:480px;width:100%;min-width:0}.globe{position:absolute;width:360px;height:360px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;box-shadow:0 0 40px #7bd79f25}.globe img{object-fit:cover;transform:scale(1.3)}.card{position:absolute;display:flex;align-items:center;gap:11px;padding:13px 14px;width:205px;background:#fffffff2;border:1px solid #e0efe6;border-radius:15px;box-shadow:0 7px 20px #28663e08;z-index:1}.icon{width:36px;height:36px;border-radius:9px;background:#e8f7ef;color:#188a52;display:flex;align-items:center;justify-content:center;flex-shrink:0}.icon svg{width:19px;height:19px}.card h3{font-size:14px;font-weight:750;line-height:1.2;margin:0 0 4px}.card p{font-size:11px;line-height:1.25;color:#60748a;margin:0}.stage0{left:50%;top:0;transform:translateX(-50%)}.stage1{right:0;top:95px}.stage2{right:0;bottom:95px}.stage3{left:50%;bottom:0;transform:translateX(-50%)}.stage4{left:0;bottom:95px}.stage5{left:0;top:95px}
+@media(min-width:1600px){.inner{max-width:1640px;grid-template-columns:minmax(0,.85fr) minmax(0,1.25fr)}.copy h2{font-size:44px}.card{width:220px}.card h3{font-size:15px}.card p{font-size:12px}.globe{width:380px;height:380px}}
+@media(max-width:1100px){.inner{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:20px;padding:30px 24px}.copy h2{font-size:32px}.copy>p{font-size:14px}.diagram{height:420px}.globe{width:280px;height:280px}.card{width:170px;padding:10px;gap:8px}.card h3{font-size:12px}.card p{font-size:10px}.icon{width:29px;height:29px}.stage1,.stage5{top:85px}.stage2,.stage4{bottom:85px}.metrics{padding:12px;gap:8px}.metrics>div{font-size:11px}.metrics svg{width:22px;height:22px}}
+@media(max-width:800px){.inner{grid-template-columns:1fr;gap:25px;min-height:0}.copy h2{font-size:35px;max-width:650px}.copy>p{font-size:15px}.diagram{max-width:700px;margin:auto;height:440px}.globe{width:320px;height:320px}.card{width:190px}.card h3{font-size:13px}.card p{font-size:11px}.stage1,.stage5{top:90px}.stage2,.stage4{bottom:90px}.metrics{max-width:600px}.metrics>div{font-size:13px}}
+@media(max-width:520px){.inner{padding:30px 20px}.copy h2{font-size:31px}.diagram{height:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.globe{position:relative;inset:auto;transform:none;grid-column:1/-1;width:280px;height:280px;margin:0 auto 10px}.card{position:relative;inset:auto;transform:none;width:100%;padding:10px;gap:8px}.card h3{font-size:12px}.card p{font-size:10px}.metrics{padding:12px 10px}.metrics>div{font-size:11px}}
+
+/* Keep both side columns aligned and reserve room for every connector. */
+@media(min-width:801px){
+  .diagram{height:520px;--card-width:190px;--globe-size:320px}
+  .globe{width:var(--globe-size);height:var(--globe-size)}
+  .card{width:var(--card-width);min-height:78px;padding:12px;gap:10px}
+  .stage0,.stage3{width:215px}
+  .stage1,.stage5{top:112px}
+  .stage2,.stage4{bottom:112px}
+  .connector{position:absolute;pointer-events:none}
+  .connector i{position:absolute;width:7px;height:7px;border-radius:50%;background:#0b9b58}
+  .stage0 .connector{height:22px;border-left:1px dashed #35bd78;top:100%;left:50%}
+  .stage0 .connector i{left:-4px;bottom:-4px}
+  .stage3 .connector{height:22px;border-left:1px dashed #35bd78;bottom:100%;left:50%}
+  .stage3 .connector i{left:-4px;top:-4px}
+  .stage1 .connector,.stage2 .connector{right:100%;top:50%;width:max(18px,calc((100cqw - var(--globe-size)) / 2 - var(--card-width) + 22px));border-top:1px dashed #35bd78}
+  .stage1 .connector i,.stage2 .connector i{left:-4px;top:-4px}
+  .stage4 .connector,.stage5 .connector{left:100%;top:50%;width:max(18px,calc((100cqw - var(--globe-size)) / 2 - var(--card-width) + 22px));border-top:1px dashed #35bd78}
+  .stage4 .connector i,.stage5 .connector i{right:-4px;top:-4px}
+  .diagram{container-type:inline-size}
+}
+@media(min-width:1450px){.diagram{--card-width:205px;--globe-size:340px}.card h3{font-size:14px}.card p{font-size:11px}}
+@media(min-width:801px) and (max-width:1100px){.diagram{--card-width:155px;--globe-size:240px;height:450px}.card{min-height:72px;gap:7px;padding:9px}.stage0,.stage3{width:190px}.stage1,.stage5{top:100px}.stage2,.stage4{bottom:100px}}
+@media(max-width:800px){.connector{display:none}.card{min-height:75px}.stage1,.stage5{top:80px}.stage2,.stage4{bottom:80px}.globe{width:280px;height:280px}}
+@media(max-width:520px){.card{min-height:75px}.stage1,.stage5,.stage2,.stage4{top:auto;bottom:auto}}
+@media(min-width:1101px){.diagram{--card-width:clamp(170px,24cqw,205px);--globe-size:min(340px,calc(100cqw - 2 * var(--card-width) - 40px))}}
+.connections{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible}
+@media(max-width:520px){.connections{display:none}}

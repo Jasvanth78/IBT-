@@ -186,6 +186,25 @@ export const settingsSchema = z.object({
     badgeClass: z.string().trim().max(200).optional().or(z.literal('')),
   })).optional(),
 
+
+  // Products Page
+  productsHeroTitle: z.string().trim().max(200).optional().or(z.literal('')),
+  productsHeroHighlight: z.string().trim().max(200).optional().or(z.literal('')),
+  productsHeroDescription: z.string().trim().max(2000).optional().or(z.literal('')),
+  productsHeroImageUrl: z.string().trim().max(2000).optional().or(z.literal('')),
+  productsHeroProjectsDelivered: z.string().trim().max(100).optional().or(z.literal('')),
+  productsHeroClientSatisfaction: z.string().trim().max(100).optional().or(z.literal('')),
+  productsMicroAppsTitle: z.string().trim().max(200).optional().or(z.literal('')),
+  productsMicroAppsSubtitle: z.string().trim().max(200).optional().or(z.literal('')),
+  productsMicroAppsLeftIntro: z.string().trim().max(2000).optional().or(z.literal('')),
+  productsMicroAppsLeftHeading: z.string().trim().max(200).optional().or(z.literal('')),
+  productsMicroAppsLeftText: z.string().trim().max(2000).optional().or(z.literal('')),
+  productsMicroAppsLeftBullets: z.array(z.string().trim().max(500)).optional(),
+  productsMicroAppsRightTextTop: z.string().trim().max(5000).optional().or(z.literal('')),
+  productsMicroAppsRightHeading: z.string().trim().max(200).optional().or(z.literal('')),
+  productsMicroAppsRightBullets: z.array(z.string().trim().max(500)).optional(),
+  productsMicroAppsRightTextBottom: z.string().trim().max(2000).optional().or(z.literal('')),
+
   // Home – Video Background
   homeVideoUrl: z.string().trim().url('Home video must be a valid URL').or(z.literal('')),
   homeVideoEnabled: z.boolean(),

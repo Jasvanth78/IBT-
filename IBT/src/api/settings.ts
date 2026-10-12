@@ -58,6 +58,24 @@ export const fetchSiteSettings = async (): Promise<SiteSettingsRealtimePayload> 
       servicesWhatFeatures: data?.servicesWhatFeatures ?? null,
       servicesWhatImages: data?.servicesWhatImages ?? null,
 
+      // Products Page
+      productsHeroTitle: data?.productsHeroTitle ?? null,
+      productsHeroHighlight: data?.productsHeroHighlight ?? null,
+      productsHeroDescription: data?.productsHeroDescription ?? null,
+      productsHeroImageUrl: data?.productsHeroImageUrl ?? null,
+      productsHeroProjectsDelivered: data?.productsHeroProjectsDelivered ?? null,
+      productsHeroClientSatisfaction: data?.productsHeroClientSatisfaction ?? null,
+      productsMicroAppsTitle: data?.productsMicroAppsTitle ?? null,
+      productsMicroAppsSubtitle: data?.productsMicroAppsSubtitle ?? null,
+      productsMicroAppsLeftIntro: data?.productsMicroAppsLeftIntro ?? null,
+      productsMicroAppsLeftHeading: data?.productsMicroAppsLeftHeading ?? null,
+      productsMicroAppsLeftText: data?.productsMicroAppsLeftText ?? null,
+      productsMicroAppsLeftBullets: data?.productsMicroAppsLeftBullets ?? null,
+      productsMicroAppsRightTextTop: data?.productsMicroAppsRightTextTop ?? null,
+      productsMicroAppsRightHeading: data?.productsMicroAppsRightHeading ?? null,
+      productsMicroAppsRightBullets: data?.productsMicroAppsRightBullets ?? null,
+      productsMicroAppsRightTextBottom: data?.productsMicroAppsRightTextBottom ?? null,
+
       // Home – Solutions Section
       homeSolutionsTitle: data?.homeSolutionsTitle ?? null,
       homeSolutionsBadge: data?.homeSolutionsBadge ?? null,
@@ -243,6 +261,24 @@ export const fetchSiteSettings = async (): Promise<SiteSettingsRealtimePayload> 
       servicesWhatDescription: null,
       servicesWhatFeatures: null,
       servicesWhatImages: null,
+
+      // Products Page
+      productsHeroTitle: null,
+      productsHeroHighlight: null,
+      productsHeroDescription: null,
+      productsHeroImageUrl: null,
+      productsHeroProjectsDelivered: null,
+      productsHeroClientSatisfaction: null,
+      productsMicroAppsTitle: null,
+      productsMicroAppsSubtitle: null,
+      productsMicroAppsLeftIntro: null,
+      productsMicroAppsLeftHeading: null,
+      productsMicroAppsLeftText: null,
+      productsMicroAppsLeftBullets: null,
+      productsMicroAppsRightTextTop: null,
+      productsMicroAppsRightHeading: null,
+      productsMicroAppsRightBullets: null,
+      productsMicroAppsRightTextBottom: null,
 
       // Home – Services & Recent Work Sections
       homeServicesTitle: null,

@@ -7,6 +7,278 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  password  String
+  name      String?
+  role      Role       @default(USER)
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  auditLogs AuditLog[]
+}
+
+model Stat {
+  id        String   @id @default(uuid())
+  label     String
+  value     String
+  category  String?
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id           String   @id @default(uuid())
+  title        String
+  slug         String   @unique
+  description  String
+  imageUrl     String
+  tags         String[]
+  order        Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  projectUrl   String?
+  categoryType String   @default("SERVICE")
+  isFeatured   Boolean  @default(false)
+
+  @@index([order])
+  @@index([categoryType])
+}
+
+model Branch {
+  id          String         @id @default(uuid())
+  name        String         @unique
+  location    String
+  type        BranchType
+  order       Int            @unique
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  address     String?
+  mapUrl      String?
+  teamMembers BranchMember[]
+
+  @@index([order])
+}
+
+model Member {
+  id          String         @id @default(uuid())
+  name        String
+  role        String
+  avatarUrl   String
+  email       String         @unique
+  phone       String         @unique
+  order       Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  linkedinUrl String?
+  branches    BranchMember[]
+}
+
+model BranchMember {
+  id        String   @id @default(uuid())
+  branchId  String
+  memberId  String
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  branch    Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([branchId, order])
+}
+
+model Partner {
+  id        String   @id @default(uuid())
+  name      String
+  logoUrl   String
+  website   String?
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  logoUrl   String
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  website   String?
+
+  @@index([order])
+}
+
+model PartnerCollege {
+  id        String   @id @default(uuid())
+  name      String
+  logoUrl   String
+  website   String?
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Testimonial {
+  id        String   @id @default(uuid())
+  name      String
+  content   String
+  role      String?
+  company   String?
+  avatarUrl String?
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Blog {
+  id          String     @id @default(uuid())
+  title       String
+  slug        String     @unique
+  content     String
+  imageUrl    String?
+  publishedAt DateTime?
+  status      BlogStatus @default(DRAFT)
+  featured    Boolean    @default(false)
+  category    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  quickTips   String[]   @default([])
+}
+
+model LabProject {
+  id          String    @id @default(uuid())
+  title       String
+  slug        String    @unique
+  description String
+  content     String?
+  imageUrl    String?
+  gallery     String[]
+  tags        String[]
+  techStack   String[]
+  projectUrl  String?
+  repoUrl     String?
+  status      LabStatus @default(ONGOING)
+  featured    Boolean   @default(false)
+  order       Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([order])
+}
+
+model Contact {
+  id        String      @id @default(uuid())
+  type      ContactType
+  value     String
+  order     Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model SocialLink {
+  id        String   @id @default(uuid())
+  platform  String
+  logoUrl   String
+  url       String
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+model Terms {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Setting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String      @id @default(uuid())
+  userId    String?
+  action    AuditAction
+  entity    String
+  entityId  String
+  oldData   Json?
+  newData   Json?
+  createdAt DateTime    @default(now())
+  user      User?       @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([entity])
+  @@index([entityId])
+}
+
+model ContactSubmission {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  company   String?
+  subject   String?
+  message   String
+  ipAddress String?
+  status    String   @default("NEW")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InternshipApplication {
+  id              String   @id @default(uuid())
+  name            String
+  email           String
+  phone           String
+  about           String
+  skills          String
+  jobType         String
+  applicationType String   @default("INTERNSHIP")
+  resumeUrl       String?
+  status          String   @default("PENDING")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model OneTimePassword {
+  id        String   @id @default(uuid())
+  email     String
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model LabIdeaSubmission {
+  id              String   @id @default(uuid())
+  firstName       String
+  lastName        String?
+  email           String
+  category        String
+  ideaTitle       String
+  description     String
+  attachments     String[]
+  privacyAccepted Boolean
+  status          String   @default("PENDING")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
 enum Role {
   USER
   MANAGER
@@ -37,316 +309,9 @@ enum ContactType {
   ADDRESS
 }
 
-// audit logs
-
 enum AuditAction {
   CREATE
   UPDATE
   DELETE
   LOGIN
-}
-
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      Role     @default(USER)
-  isActive  Boolean  @default(true)
-
-  auditLogs AuditLog[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Stat {
-  id        String @id @default(uuid())
-  label     String
-  value     String
-  category  String?
-  order     Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Service {
-  id          String   @id @default(uuid())
-  title       String
-  slug        String   @unique
-  description String
-  imageUrl    String
-  tags        String[]
-  order       Int
-  projectUrl  String?
-  categoryType String  @default("SERVICE")
-  isFeatured  Boolean  @default(false)
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([order])
-  @@index([categoryType])
-}
-
-model Branch {
-  id          String @id @default(uuid())
-  name        String @unique
-  location    String
-  address     String?
-  mapUrl      String?
-  type        BranchType
-  order       Int
-  teamMembers BranchMember[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([order])
-  @@index([order])
-}
-
-model Member {
-  id        String @id @default(uuid())
-  name      String
-  role      String
-  avatarUrl String
-
-  email       String  @unique
-  linkedinUrl String?
-  phone       String  @unique
-  order       Int     @default(0)
-
-  branches  BranchMember[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model BranchMember {
-  id        String @id @default(uuid())
-  branchId  String
-  memberId  String
-  order     Int
-
-  branch    Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
-  member    Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([branchId, order])
-}
-
-model Partner {
-  id        String @id @default(uuid())
-  name      String
-  logoUrl   String
-  website   String?
-  order     Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([order])
-}
-
-model Client {
-  id        String @id @default(uuid())
-  name      String
-  logoUrl   String
-  website   String?
-  order     Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([order])
-}
-
-model PartnerCollege {
-  id        String @id @default(uuid())
-  name      String
-  logoUrl   String
-  website   String?
-  order     Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([order])
-}
-
-
-model Testimonial {
-  id        String @id @default(uuid())
-  name      String
-  content   String
-  role      String?
-  company   String?
-  avatarUrl String?
-  order     Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([order])
-}
-
-model Blog {
-  id          String     @id @default(uuid())
-  title       String
-  slug        String     @unique
-  content     String
-  imageUrl    String?
-  publishedAt DateTime?
-  status      BlogStatus @default(DRAFT)
-  featured    Boolean    @default(false)
-  category    String?
-  quickTips   String[]   @default([])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model LabProject {
-  id          String   @id @default(uuid())
-  title       String
-  slug        String   @unique
-  description String
-  content     String?
-
-  imageUrl    String?
-  gallery     String[]
-
-  tags        String[]
-  techStack   String[]
-
-  projectUrl  String?
-  repoUrl     String?
-
-  status      LabStatus @default(ONGOING)
-  featured    Boolean   @default(false)
-  order       Int?
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([order])
-}
-
-model Contact {
-  id        String @id @default(uuid())
-  type      ContactType
-  value     String
-  order     Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model SocialLink {
-  id        String @id @default(uuid())
-  platform  String
-  logoUrl   String
-  url       String
-  order     Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([order])
-}
-
-model Terms {
-  id        String @id @default(uuid())
-  content   String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Setting {
-  id        String @id @default(uuid())
-  key       String @unique
-  value     Json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model AuditLog {
-  id        String      @id @default(uuid())
-  userId    String?
-  action    AuditAction
-  entity    String
-  entityId  String
-
-  oldData   Json?
-  newData   Json?
-
-  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  createdAt DateTime    @default(now())
-
-  @@index([userId])
-  @@index([entity])
-  @@index([entityId])
-}
-model ContactSubmission {
-  id        String   @id @default(uuid())
-  name      String
-  email     String
-  phone     String?
-  company   String?
-  subject   String?
-  message   String
-  ipAddress String?
-  
-  status    String   @default("NEW")
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model InternshipApplication {
-  id          String   @id @default(uuid())
-  name        String
-  email       String
-  phone       String
-  about       String
-  skills          String
-  jobType         String
-  applicationType String   @default("INTERNSHIP")
-  resumeUrl       String?
-  status          String   @default("PENDING")
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model OneTimePassword {
-  id        String   @id @default(uuid())
-  email     String
-  otp       String
-  expiresAt DateTime
-  
-  createdAt DateTime @default(now())
-}
-
-model LabIdeaSubmission {
-  id              String   @id @default(uuid())
-  firstName       String
-  lastName        String?
-  email           String
-  category        String
-  ideaTitle       String
-  description     String
-  attachments     String[]
-  privacyAccepted Boolean
-  status          String   @default("PENDING")
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
 }

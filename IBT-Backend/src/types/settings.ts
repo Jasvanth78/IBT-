@@ -139,6 +139,24 @@ export const SETTINGS = {
   SERVICES_WHAT_FEATURES: "services_what_features",
   SERVICES_WHAT_IMAGES: "services_what_images",
 
+  // Products Page
+  PRODUCTS_HERO_TITLE: "products_hero_title",
+  PRODUCTS_HERO_HIGHLIGHT: "products_hero_highlight",
+  PRODUCTS_HERO_DESCRIPTION: "products_hero_description",
+  PRODUCTS_HERO_IMAGE_URL: "products_hero_image_url",
+  PRODUCTS_HERO_PROJECTS_DELIVERED: "products_hero_projects_delivered",
+  PRODUCTS_HERO_CLIENT_SATISFACTION: "products_hero_client_satisfaction",
+  PRODUCTS_MICRO_APPS_TITLE: "products_micro_apps_title",
+  PRODUCTS_MICRO_APPS_SUBTITLE: "products_micro_apps_subtitle",
+  PRODUCTS_MICRO_APPS_LEFT_INTRO: "products_micro_apps_left_intro",
+  PRODUCTS_MICRO_APPS_LEFT_HEADING: "products_micro_apps_left_heading",
+  PRODUCTS_MICRO_APPS_LEFT_TEXT: "products_micro_apps_left_text",
+  PRODUCTS_MICRO_APPS_LEFT_BULLETS: "products_micro_apps_left_bullets",
+  PRODUCTS_MICRO_APPS_RIGHT_TEXT_TOP: "products_micro_apps_right_text_top",
+  PRODUCTS_MICRO_APPS_RIGHT_HEADING: "products_micro_apps_right_heading",
+  PRODUCTS_MICRO_APPS_RIGHT_BULLETS: "products_micro_apps_right_bullets",
+  PRODUCTS_MICRO_APPS_RIGHT_TEXT_BOTTOM: "products_micro_apps_right_text_bottom",
+
   // Home – Solutions Section
   HOME_SOLUTIONS_TITLE: "home_solutions_title",
   HOME_SOLUTIONS_BADGE: "home_solutions_badge",

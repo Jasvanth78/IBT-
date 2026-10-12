@@ -20,6 +20,7 @@ const ServicesContentMasterPage = lazy(() => import('../pages/admin/master/servi
 const HomeContentMasterPage = lazy(() => import('../pages/admin/master/home/HomeContentMasterPage').then(m => ({ default: m.HomeContentMasterPage })))
 const AboutMasterPage = lazy(() => import('../pages/admin/master/about/AboutMasterPage').then(m => ({ default: m.AboutMasterPage })))
 const ContactContentMasterPage = lazy(() => import('../pages/admin/master/contacts/ContactContentMasterPage').then(m => ({ default: m.ContactContentMasterPage })))
+const ProductsContentMasterPage = lazy(() => import('../pages/admin/master/products/ProductsContentMasterPage').then(m => ({ default: m.ProductsContentMasterPage })))
 
 // Master pages – Stats
 const StatsMasterPage = lazy(() => import('../pages/admin/master/stats/StatsMasterPage').then(m => ({ default: m.StatsMasterPage })))
@@ -102,6 +103,7 @@ export function AppRoutes() {
             <Route path="master/services/content" element={<ServicesContentMasterPage />} />
             <Route path="master/home/content" element={<HomeContentMasterPage />} />
             <Route path="master/about/content" element={<AboutMasterPage />} />
+            <Route path="master/products/content" element={<ProductsContentMasterPage />} />
             <Route path="master/stats" element={<StatsMasterPage />} />
             <Route path="master/stats/reorder" element={<StatsReorderPage />} />
             <Route path="master/testimonials" element={<TestimonialsMasterPage />} />

@@ -8,7 +8,7 @@ import { formatAddress } from '@/src/utils/address'
 
 export const dynamic = 'force-dynamic'
 
-type Props = {}
+type Props = { searchParams: Promise<{ inquiry?: string | string[] }> }
 
 const stripHtmlTags = (value?: string | null) => {
   if (!value) return null
@@ -18,7 +18,9 @@ const stripHtmlTags = (value?: string | null) => {
     .trim() || null
 }
 
-export default async function ContactPage(_: Props) {
+export default async function ContactPage({ searchParams }: Props) {
+  const query = await searchParams
+  const initialInquiryType = query.inquiry === 'lca-demo' ? 'LCA Demo Request' : 'IBT Labs'
   // Server-side fetch of settings and branches
   const settings = (await fetchSiteSettings().catch(() => ({} as SiteSettingsRealtimePayload))) as SiteSettingsRealtimePayload
   const branches = await apiClient.getBranches(1, 10).then((r) => r.items).catch(() => [] as PublicBranch[])
@@ -118,7 +120,7 @@ export default async function ContactPage(_: Props) {
           <div className="lg:col-span-7 w-full bg-white rounded-3xl border border-slate-100 shadow-2xl p-1 sm:p-2">
             <Suspense fallback={<div className="py-20 text-center text-sm font-medium text-slate-400">Loading interactive interface…</div>}>
               {/* @ts-ignore server -> client prop passing explicitly allowed */}
-              <ContactFormClient initialSettings={settings} initialBranches={branches} />
+              <ContactFormClient key={initialInquiryType} initialSettings={settings} initialBranches={branches} initialInquiryType={initialInquiryType} />
             </Suspense>
           </div>
         </div>
@@ -212,24 +214,17 @@ export default async function ContactPage(_: Props) {
 
             {/* MAP GRAPHICAL CONTAINER BLOCK */}
             <div className="lg:col-span-7 relative h-[340px] sm:h-[400px] w-full rounded-3xl overflow-hidden border border-slate-100 shadow-xl bg-slate-50">
-              <img
-                src="/map.png"
-                alt="Coimbatore regional spatial layout coordinate visualization"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-
-              {/* Custom floating tooltip card mimicking structural Google embed maps viewport layout */}
-              <div className="absolute top-4 left-4 bg-white p-3 rounded-xl shadow-lg border border-slate-100 max-w-xs z-10 hidden sm:block">
-                <h5 className="text-xs font-bold text-slate-900">IBACUS TECH SOLUTION</h5>
-                <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">I-BACUS-TECH, 3rd Floor, 6C, Chitra Nagar, Saravanampatti, Coimbatore, Tamil Nadu-641035.</p>
-                <button className="text-[10px] font-bold text-blue-600 mt-2 block hover:underline"></button>
-              </div>
-
-              {/* Central Pin Anchor */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-10">
-                <div className="h-4 w-4 bg-[#e63946] rounded-full animate-ping absolute opacity-45" />
-                <div className="h-4 w-4 bg-[#e63946] border-2 border-white rounded-full shadow-md relative" />
-              </div>
+              <iframe 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }}
+                loading="lazy"
+                src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=I-BACUS-TECH,%20Saravanampatti,%20Coimbatore+(I-BACUS-TECH)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                className="absolute inset-0 w-full h-full border-0"
+                allowFullScreen
+                aria-hidden="false"
+                tabIndex={0}
+              ></iframe>
             </div>
 
           </div>

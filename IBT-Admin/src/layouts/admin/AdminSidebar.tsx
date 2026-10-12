@@ -33,7 +33,8 @@ const NAV_LINKS: NavItem[] = [
     children: [
       { label: 'Home Content', icon: <FiHome />, to: '/admin/master/home/content' },
       { label: 'About Content', icon: <FiFileText />, to: '/admin/master/about/content' },
-      { label: 'Services & Products', icon: <FiBriefcase />, to: '/admin/master/services' },
+      { label: 'Services Master', icon: <FiBriefcase />, to: '/admin/master/services' },
+      { label: 'Product Page', icon: <FiFileText />, to: '/admin/master/products/content' },
       { label: 'Stats', icon: <FiFileText />, to: '/admin/master/stats' },
       { label: 'Testimonials', icon: <FiStar />, to: '/admin/master/testimonials' },
       { label: 'Partners', icon: <FiLayers />, to: '/admin/master/partners' },

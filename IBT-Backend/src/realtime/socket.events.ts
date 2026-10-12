@@ -45,6 +45,24 @@ export type SiteSettingsRealtimePayload = {
   servicesCtaBtn2Text?: string | null;
   servicesCtaBtn2Url?: string | null;
 
+  // Products Page
+  productsHeroTitle?: string | null;
+  productsHeroHighlight?: string | null;
+  productsHeroDescription?: string | null;
+  productsHeroImageUrl?: string | null;
+  productsHeroProjectsDelivered?: string | null;
+  productsHeroClientSatisfaction?: string | null;
+  productsMicroAppsTitle?: string | null;
+  productsMicroAppsSubtitle?: string | null;
+  productsMicroAppsLeftIntro?: string | null;
+  productsMicroAppsLeftHeading?: string | null;
+  productsMicroAppsLeftText?: string | null;
+  productsMicroAppsLeftBullets?: string[] | null;
+  productsMicroAppsRightTextTop?: string | null;
+  productsMicroAppsRightHeading?: string | null;
+  productsMicroAppsRightBullets?: string[] | null;
+  productsMicroAppsRightTextBottom?: string | null;
+
   // Home – Video Background
   homeVideoUrl?: string | null;
   homeVideoEnabled?: boolean;

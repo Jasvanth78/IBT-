@@ -14,24 +14,22 @@ function CollegeMarqueeCard({
   item: PublicPartnerCollege;
 }) {
   const content = (
-    <div className="group flex h-[100px] w-[220px] shrink-0 flex-col items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-all duration-500 hover:border-blue-100 hover:shadow-xl hover:-translate-y-1.5">
-      <div className="flex h-full w-full items-center justify-center">
+    <div className="group flex h-[120px] w-[220px] shrink-0 flex-col items-center justify-center overflow-hidden rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition-all duration-500 hover:border-blue-100 hover:shadow-xl hover:-translate-y-1.5">
+      <div className="flex flex-col h-full w-full items-center justify-center gap-3">
         {item.logoUrl ? (
           <img
             src={item.logoUrl}
             alt={item.name}
-            className="max-h-14 max-w-[92%] object-contain transition-transform duration-500 group-hover:scale-105"
+            className="h-10 w-full object-contain transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex flex-col items-center justify-center gap-1.5 text-center">
-            <span className="text-sm font-bold tracking-tight text-[#1e293b] transition-colors duration-300 group-hover:text-blue-600 line-clamp-1">
-              {item.name}
-            </span>
-            <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
-              Institution
-            </span>
+          <div className="flex h-10 w-full items-center justify-center">
+             <FiBookOpen className="text-slate-300" size={24} />
           </div>
         )}
+        <span className="text-[12px] font-bold tracking-tight text-[#1e293b] text-center transition-colors duration-300 group-hover:text-blue-600 line-clamp-2 leading-snug px-1">
+          {item.name}
+        </span>
       </div>
     </div>
   );

@@ -214,7 +214,7 @@ label {
 
 
 
-/* Force word wrap on rich text output */
+/* Force word wrap on rich text output without aggressive breaking */
 .html-content,
 .rich-text-content,
 .prose,
@@ -222,8 +222,8 @@ label {
 .rich-text-content *,
 .prose * {
   white-space: normal !important;
-  word-break: break-word !important;
-  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
 }
@@ -234,10 +234,10 @@ label {
 .prose,
 .html-content,
 .rich-text-content {
-  text-align: justify;
+  text-align: left !important;
   white-space: normal !important;
-  word-break: break-word !important;
-  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
 }
 
 /* Hide WhatsApp and scroll buttons when mobile nav is open */

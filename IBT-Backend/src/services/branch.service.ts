@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma";
 import { httpError } from "../utils/httpError";
 import { logAction } from "../utils/logAction";
 
-// Creates a new branch with the given input
+
 type CreateBranchInput = {
   name: string;
   location: string;

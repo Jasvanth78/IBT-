@@ -8,6 +8,7 @@ import {
   FiArrowRight,
   FiTarget,
   FiUsers,
+  FiUser,
   FiGlobe,
   FiAward,
   FiChevronRight,
@@ -517,11 +518,11 @@ export default function AboutPage() {
               {members.length > 0 ? (
                 <>
                   <div className="px-4 sm:px-12 w-full">
-                     <div className="relative group/slider flex items-center w-full">
+                    <div className="relative group/slider flex items-center w-full">
                       <button
                         onClick={scrollLeft}
                         disabled={!canScrollLeft}
-                        className={`absolute -left-4 sm:-left-12 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-colors focus:outline-none ${!canScrollLeft
+                        className={`hidden md:flex absolute -left-4 sm:-left-12 z-10 h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-colors focus:outline-none ${!canScrollLeft
                           ? 'opacity-30 cursor-not-allowed text-slate-300'
                           : 'text-slate-600 hover:text-[#e63946]'
                           }`}
@@ -532,15 +533,19 @@ export default function AboutPage() {
                       <div
                         ref={sliderRef}
                         onScroll={checkScroll}
-                        className="flex overflow-x-auto gap-5 sm:gap-6 pb-6 pt-4 px-[calc(50%-130px)] md:px-4 lg:px-8 snap-x snap-mandatory hide-scrollbar w-full"
+                        className="flex flex-col md:flex-row md:overflow-x-auto items-center md:items-stretch gap-6 pb-6 pt-4 px-4 lg:px-8 md:snap-x md:snap-mandatory hide-scrollbar w-full"
                         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                       >
                         {members.map((member) => (
                           <div
                             key={member.id}
-                            className="snap-center shrink-0 w-[260px] bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-all duration-300 flex flex-col items-center p-6"
+                            className="snap-center shrink-0 w-[220px] md:w-[190px] bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)] transition-all duration-300 flex flex-col relative overflow-hidden border-b-4 border-[#e63946]"
                           >
-                            <div className="w-24 h-24 rounded-full overflow-hidden mb-5 border-4 border-slate-50 shadow-sm shrink-0">
+                            {/* Full-width Image with Floating Badge */}
+                            <div className="w-full h-[170px] md:h-[150px] bg-slate-200 relative shrink-0">
+                              <div className="absolute top-3 left-3 w-[28px] h-[28px] bg-[#e63946] rounded-md flex items-center justify-center text-white shadow-md z-10">
+                                <FiUser size={14} />
+                              </div>
                               {member.avatarUrl ? (
                                 <img
                                   src={member.avatarUrl}
@@ -548,14 +553,40 @@ export default function AboutPage() {
                                   className="w-full h-full object-cover object-top"
                                 />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-300">
-                                  <FiUsers size={32} />
+                                <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                  <FiUser size={32} />
                                 </div>
                               )}
                             </div>
 
-                            <h4 className="text-[17px] font-bold text-[#0f172a] text-center tracking-tight leading-snug">{member.name}</h4>
-                            <p className="text-[13px] font-semibold text-[#e63946] text-center mt-1.5">{member.role}</p>
+                            {/* Name Text */}
+                            <div className="w-full shrink-0 pt-6 pb-1 flex flex-col items-center">
+                              <h4 className="text-[14px] leading-tight font-extrabold text-[#0f172a] tracking-wide text-center px-2 break-words">
+                                {member.name}
+                              </h4>
+                            </div>
+                            
+                            {/* Role Text */}
+                            <div className="w-full flex justify-center mt-1 mb-1 px-1">
+                              <p className="text-[13px] leading-[1.3] font-bold text-[#e63946] text-center break-words uppercase tracking-wide">{member.role}</p>
+                            </div>
+
+                            {/* Text details & Description */}
+                            <div className="px-3 py-3 flex flex-col items-center w-full grow">
+                              {/* Social Links */}
+                              <div className="flex items-center gap-2 mt-auto pb-1 pt-1">
+                                {member.linkedinUrl && (
+                                  <a href={member.linkedinUrl} target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-[#0f172a] flex items-center justify-center text-white hover:bg-[#1e293b] hover:-translate-y-0.5 transition-all shadow-sm">
+                                    <span className="text-[10px] font-bold font-sans">in</span>
+                                  </a>
+                                )}
+                                {member.email && (
+                                  <a href={`mailto:${member.email}`} className="w-6 h-6 rounded-full border border-[#e63946] flex items-center justify-center text-[#e63946] hover:bg-[#e63946] hover:text-white hover:-translate-y-0.5 transition-all shadow-sm">
+                                    <FiMail size={10} />
+                                  </a>
+                                )}
+                              </div>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -563,7 +594,7 @@ export default function AboutPage() {
                       <button
                         onClick={scrollRight}
                         disabled={!canScrollRight}
-                        className={`absolute -right-4 sm:-right-12 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-colors focus:outline-none ${!canScrollRight
+                        className={`hidden md:flex absolute -right-4 sm:-right-12 z-10 h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-colors focus:outline-none ${!canScrollRight
                           ? 'opacity-30 cursor-not-allowed text-slate-300'
                           : 'text-slate-600 hover:text-[#e63946]'
                           }`}
@@ -648,7 +679,7 @@ export default function AboutPage() {
           </div>
           <div className="relative z-10 text-center sm:text-left">
             <h3 className="text-xl font-extrabold !text-white sm:text-2xl">Ready to work with us?</h3>
-            <p 
+            <p
               className="text-xs text-slate-200 mt-1"
               style={{ textAlign: 'inherit' }}
             >

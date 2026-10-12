@@ -138,6 +138,23 @@ const publicSettingKeys = [
   SETTINGS.LABS_INTRO_FEATURE4_DESC,
   // Labs – Spotlights
   SETTINGS.LABS_SPOTLIGHTS,
+  // Products Page
+  SETTINGS.PRODUCTS_HERO_TITLE,
+  SETTINGS.PRODUCTS_HERO_HIGHLIGHT,
+  SETTINGS.PRODUCTS_HERO_DESCRIPTION,
+  SETTINGS.PRODUCTS_HERO_IMAGE_URL,
+  SETTINGS.PRODUCTS_HERO_PROJECTS_DELIVERED,
+  SETTINGS.PRODUCTS_HERO_CLIENT_SATISFACTION,
+  SETTINGS.PRODUCTS_MICRO_APPS_TITLE,
+  SETTINGS.PRODUCTS_MICRO_APPS_SUBTITLE,
+  SETTINGS.PRODUCTS_MICRO_APPS_LEFT_INTRO,
+  SETTINGS.PRODUCTS_MICRO_APPS_LEFT_HEADING,
+  SETTINGS.PRODUCTS_MICRO_APPS_LEFT_TEXT,
+  SETTINGS.PRODUCTS_MICRO_APPS_LEFT_BULLETS,
+  SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_TEXT_TOP,
+  SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_HEADING,
+  SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_BULLETS,
+  SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_TEXT_BOTTOM,
   // Labs – Careers
   SETTINGS.LABS_CAREERS_TITLE,
   SETTINGS.LABS_CAREERS_DESCRIPTION,
@@ -430,6 +447,8 @@ export const getPublicHome = async () => {
         id: true,
         name: true,
         role: true,
+        email: true,
+        linkedinUrl: true,
         avatarUrl: true,
         branches: {
           select: {
@@ -773,6 +792,8 @@ export const getPublicTeam = async (filters: {
           id: true,
           name: true,
           role: true,
+          email: true,
+          linkedinUrl: true,
           avatarUrl: true,
           order: true,
           branches: {
@@ -1198,6 +1219,24 @@ export const getPublicSiteConfig = async () => {
     homeRecentWorkTitle: (values.get(SETTINGS.HOME_RECENT_WORK_TITLE) as string | undefined) ?? null,
     homeRecentWorkBadge: (values.get(SETTINGS.HOME_RECENT_WORK_BADGE) as string | undefined) ?? null,
     homeRecentWorkItems: (values.get(SETTINGS.HOME_RECENT_WORK_ITEMS) as unknown[] | undefined) ?? [],
+
+    // Products Page
+    productsHeroTitle: (values.get(SETTINGS.PRODUCTS_HERO_TITLE) as string | undefined) ?? null,
+    productsHeroHighlight: (values.get(SETTINGS.PRODUCTS_HERO_HIGHLIGHT) as string | undefined) ?? null,
+    productsHeroDescription: (values.get(SETTINGS.PRODUCTS_HERO_DESCRIPTION) as string | undefined) ?? null,
+    productsHeroImageUrl: (values.get(SETTINGS.PRODUCTS_HERO_IMAGE_URL) as string | undefined) ?? null,
+    productsHeroProjectsDelivered: (values.get(SETTINGS.PRODUCTS_HERO_PROJECTS_DELIVERED) as string | undefined) ?? null,
+    productsHeroClientSatisfaction: (values.get(SETTINGS.PRODUCTS_HERO_CLIENT_SATISFACTION) as string | undefined) ?? null,
+    productsMicroAppsTitle: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_TITLE) as string | undefined) ?? null,
+    productsMicroAppsSubtitle: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_SUBTITLE) as string | undefined) ?? null,
+    productsMicroAppsLeftIntro: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_LEFT_INTRO) as string | undefined) ?? null,
+    productsMicroAppsLeftHeading: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_LEFT_HEADING) as string | undefined) ?? null,
+    productsMicroAppsLeftText: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_LEFT_TEXT) as string | undefined) ?? null,
+    productsMicroAppsLeftBullets: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_LEFT_BULLETS) as string[] | undefined) ?? [],
+    productsMicroAppsRightTextTop: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_TEXT_TOP) as string | undefined) ?? null,
+    productsMicroAppsRightHeading: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_HEADING) as string | undefined) ?? null,
+    productsMicroAppsRightBullets: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_BULLETS) as string[] | undefined) ?? [],
+    productsMicroAppsRightTextBottom: (values.get(SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_TEXT_BOTTOM) as string | undefined) ?? null,
 
     // Labs – Initiatives, Rigor, Mentorship
     labs_initiatives: (values.get(SETTINGS.LABS_INITIATIVES) as unknown[] | undefined) ?? [],

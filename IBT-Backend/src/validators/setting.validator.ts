@@ -197,6 +197,24 @@ export const settingSchemas: Record<string, z.ZodTypeAny> = {
   })),
   [SETTINGS.SERVICES_WHAT_IMAGES]: z.array(z.string().trim().max(2000).optional().or(z.literal(''))),
 
+  // Products Page
+  [SETTINGS.PRODUCTS_HERO_TITLE]: z.string().trim().max(200).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_HERO_HIGHLIGHT]: z.string().trim().max(200).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_HERO_DESCRIPTION]: z.string().trim().max(2000).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_HERO_IMAGE_URL]: z.string().trim().max(2000).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_HERO_PROJECTS_DELIVERED]: z.string().trim().max(100).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_HERO_CLIENT_SATISFACTION]: z.string().trim().max(100).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_MICRO_APPS_TITLE]: z.string().trim().max(200).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_MICRO_APPS_SUBTITLE]: z.string().trim().max(200).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_MICRO_APPS_LEFT_INTRO]: z.string().trim().max(2000).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_MICRO_APPS_LEFT_HEADING]: z.string().trim().max(200).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_MICRO_APPS_LEFT_TEXT]: z.string().trim().max(2000).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_MICRO_APPS_LEFT_BULLETS]: z.array(z.string().trim().max(500)).optional(),
+  [SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_TEXT_TOP]: z.string().trim().max(5000).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_HEADING]: z.string().trim().max(200).optional().or(z.literal('')),
+  [SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_BULLETS]: z.array(z.string().trim().max(500)).optional(),
+  [SETTINGS.PRODUCTS_MICRO_APPS_RIGHT_TEXT_BOTTOM]: z.string().trim().max(2000).optional().or(z.literal('')),
+
   // Home – Solutions Section
   [SETTINGS.HOME_SOLUTIONS_TITLE]: z.string().trim().max(200).optional().or(z.literal('')),
   [SETTINGS.HOME_SOLUTIONS_BADGE]: z.string().trim().max(100).optional().or(z.literal('')),

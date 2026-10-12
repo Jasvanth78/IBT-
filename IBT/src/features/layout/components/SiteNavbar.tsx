@@ -14,6 +14,7 @@ const navItems = [
   { href: '/products', label: 'Products' },
   { href: '/internship', label: 'Internship' },
   { href: '/ibt-labs', label: 'IBT Labs' },
+  { href: '/lca', label: 'LCA' },
   { href: '/contact-us', label: 'Contact Us' }
 ];
 

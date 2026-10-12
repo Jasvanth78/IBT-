@@ -34,6 +34,7 @@ import {
   FiRefreshCw,
   FiChevronUp
 } from 'react-icons/fi';
+import { useSocketSettings } from '@/src/providers/SocketSettingsProvider';
 
 function stripHtml(raw?: string | null): string {
   if (!raw) return '';
@@ -340,6 +341,20 @@ export function AllProductsPage() {
   const [dynamicProducts, setDynamicProducts] = useState<ProductProject[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const { settings } = useSocketSettings();
+  
+  // Safe parsing helper for JSON arrays
+  const parseJsonSafe = (val: any, fallback: any[]) => {
+    if (Array.isArray(val) && val.length > 0) return val;
+    if (typeof val === 'string' && val.trim().startsWith('[')) {
+      try {
+        const parsed = JSON.parse(val);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) { }
+    }
+    return fallback;
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -419,12 +434,12 @@ export function AllProductsPage() {
               </span>
 
               <h1 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#0f172a] leading-[1.15]">
-                Turning Ideas Into <br className="hidden lg:block" />
-                <span className="text-[#e63946]">Real Digital</span> Products
+                {settings.productsHeroTitle || 'Turning Ideas Into'} <br className="hidden lg:block" />
+                <span className="text-[#e63946]">{settings.productsHeroHighlight || 'Real Digital'}</span> Products
               </h1>
 
-              <p className="mt-6 pt-4 sm:mt-8 text-base sm:text-lg text-slate-600 leading-relaxed w-full max-w-full lg:max-w-xl">
-                We build scalable web applications, mobile apps, AI solutions and enterprise software that solve real business problems and create real impact.
+              <p className="mt-6 pt-4 sm:mt-8 text-base sm:text-lg text-slate-600 leading-relaxed w-full max-w-full lg:max-w-xl whitespace-pre-wrap">
+                {settings.productsHeroDescription || 'We build scalable web applications, mobile apps, AI solutions and enterprise software that solve real business problems and create real impact.'}
               </p>
 
               {/* Action Buttons */}
@@ -443,62 +458,174 @@ export function AllProductsPage() {
                   Contact Us
                 </Link>
               </div>
-            </div>
 
-            {/* Right Hero Image & Floating Cards Column */}
-            <div className="lg:col-span-6 relative flex items-center justify-center">
-              <div className="relative w-full max-w-lg">
-                {/* Main Hero Laptop Image */}
-                <motion.div
-                  initial={{ scale: 0.95, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.6 }}
-                  className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 [isolation:isolate] [transform:translateZ(0)]"
-                >
-                  <img
-                    src="/images/products-hero-laptop.png"
-                    alt="I-BACUS TECH Digital Products Showcase Laptop"
-                    className="w-full h-auto block rounded-3xl object-cover hover:scale-105 transition-transform duration-700"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/user-hero-laptop.png';
-                    }}
-                  />
-                </motion.div>
-
-                {/* Floating Metric Card 1: Projects Delivered */}
+              {/* Metric Cards (Moved here) */}
+              <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row gap-6 sm:gap-12">
+                {/* Metric Card 1: Projects Delivered */}
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="absolute -top-4 -left-4 sm:top-4 sm:-left-6 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 shadow-xl border border-slate-100/80 flex items-center gap-3.5 z-20"
+                  className="flex items-center gap-4 bg-rose-50/40 border border-rose-100/50 py-3 px-4 rounded-2xl"
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-rose-50 text-[#e63946]">
-                    <FiBriefcase size={20} />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-50 text-[#e63946] border border-rose-100">
+                    <FiBriefcase size={22} />
                   </div>
-                  <div>
-                    <div className="text-lg font-extrabold text-[#0f172a] leading-none">250+</div>
-                    <div className="text-[11px] font-semibold text-slate-500 mt-1">Projects Delivered</div>
+                  <div className="pr-2">
+                    <div className="text-[22px] font-black text-[#0f172a] leading-none">{settings.productsHeroProjectsDelivered || '250+'}</div>
+                    <div className="text-xs font-semibold text-slate-500 mt-1.5">Projects Delivered</div>
                   </div>
                 </motion.div>
 
-                {/* Floating Metric Card 2: 95% Client Satisfaction */}
+                {/* Metric Card 2: 98% Client Satisfaction */}
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.6 }}
-                  className="absolute -bottom-4 -right-4 sm:bottom-4 sm:-right-6 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 shadow-xl border border-slate-100/80 flex items-center gap-3.5 z-20"
+                  className="flex items-center gap-4 bg-amber-50/40 border border-amber-100/50 py-3 px-4 rounded-2xl"
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-50 text-amber-500">
-                    <FiStar size={20} />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-500 border border-amber-100">
+                    <FiStar size={22} />
                   </div>
-                  <div>
-                    <div className="text-lg font-extrabold text-[#0f172a] leading-none">95%</div>
-                    <div className="text-[11px] font-semibold text-slate-500 mt-1">Client Satisfaction</div>
+                  <div className="pr-2">
+                    <div className="text-[22px] font-black text-[#0f172a] leading-none">{settings.productsHeroClientSatisfaction || '98%'}</div>
+                    <div className="text-xs font-semibold text-slate-500 mt-1.5">Client Satisfaction</div>
                   </div>
                 </motion.div>
               </div>
             </div>
 
+            {/* Right Hero Image & Floating Cards Column */}
+            <div className="lg:col-span-6 relative flex items-center justify-center lg:justify-end mt-12 lg:mt-0">
+              <div className="relative w-full max-w-[650px] xl:scale-110 origin-right">
+                {/* Main Hero Laptop Image */}
+                {settings.productsHeroImageUrl && (
+                  <motion.div
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.6 }}
+                    className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 [isolation:isolate] [transform:translateZ(0)]"
+                  >
+                    <img
+                      src={resolveImageUrl(settings.productsHeroImageUrl)}
+                      alt="I-BACUS TECH Digital Products Showcase"
+                      className="w-full h-auto block rounded-3xl object-cover hover:scale-105 transition-transform duration-700"
+                    />
+                  </motion.div>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+
+      {/* =========================================================================
+          2. MICRO APPS SECTION
+      ========================================================================= */}
+      <section className="py-16 bg-white border-t border-slate-100">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
+            
+            {/* Left Column */}
+            <div className="lg:col-span-5 flex flex-col items-start text-left min-w-0">
+              <span className="text-[13px] font-bold uppercase tracking-[0.2em] text-[#e63946] mb-2 leading-none">
+                {settings.productsMicroAppsSubtitle || 'MICRO APPS THAT'}
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-black text-[#1d3557] leading-tight mb-6">
+                {settings.productsMicroAppsTitle || 'Solve Real Business Problems'}
+              </h2>
+              
+              <p className="text-sm text-slate-600 leading-relaxed mb-6 whitespace-pre-wrap">
+                {settings.productsMicroAppsLeftIntro ? (
+                  <span>
+                    <span className="font-semibold text-[#e63946] border-b border-red-200 pb-0.5">I-BacusTech</span> {settings.productsMicroAppsLeftIntro.replace(/^I-BacusTech /i, '')}
+                  </span>
+                ) : (
+                  <>
+                    <span className="font-semibold text-[#e63946] border-b border-red-200 pb-0.5">I-BacusTech</span> helps businesses solve their everyday challenges by building small, focused applications called <strong>Micro-Apps</strong>.
+                  </>
+                )}
+              </p>
+              
+              <h3 className="text-lg font-bold text-[#1d3557] mb-3">{settings.productsMicroAppsLeftHeading || 'What is a Micro-App?'}</h3>
+              <div 
+                className="prose prose-sm max-w-none text-slate-600 prose-p:my-1.5 prose-p:leading-relaxed mb-6 prose-strong:font-bold prose-strong:text-[#1d3557] prose-a:text-blue-600 hover:prose-a:text-blue-700" 
+                dangerouslySetInnerHTML={{ __html: (settings.productsMicroAppsLeftText || 'A Micro-App is an application designed to solve one specific business problem.<br/><br/>For example, customers may make a payment but never receive a proper receipt. Instead of investing in a large billing system, a single Micro-App can generate a receipt instantly and send it via email or WhatsApp.').replace(/&nbsp;|&#160;/g, ' ') }} 
+              />
+              
+              <h3 className="text-[15px] font-bold text-[#1d3557] mb-4">Micro-Apps are:</h3>
+              <ul className="space-y-3.5 mb-8">
+                {parseJsonSafe(settings.productsMicroAppsLeftBullets, [
+                  'Focused on solving one problem at a time',
+                  'Cost effective to build than purchasing large applications with features you may never use',
+                  'Quick to deploy, develop, and display',
+                  'Available as either a ready product or cloud-based service, depending on your needs.'
+                ]).map((item: string, idx: number) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <svg width={18} height={18} viewBox="0 0 24 24" className="text-[#e63946] shrink-0 mt-0.5">
+                      <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    <span className="text-[13px] font-semibold text-slate-700 leading-snug">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            {/* Right Column */}
+            <div className="lg:col-span-7 flex flex-col gap-2 text-[13px] text-slate-700 font-medium leading-relaxed pt-1 min-w-0">
+              {settings.productsMicroAppsRightTextTop ? (
+                <div 
+                  className="prose prose-sm max-w-none prose-p:my-1.5 prose-p:leading-relaxed prose-strong:font-bold prose-strong:text-[#1d3557] prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-700" 
+                  dangerouslySetInnerHTML={{ __html: settings.productsMicroAppsRightTextTop.replace(/&nbsp;|&#160;/g, ' ') }} 
+                />
+              ) : (
+                <>
+                  <p>
+                    At <span className="font-bold border-b border-red-200 pb-0.5 text-[#1d3557]">I-BacusTech</span>, we build technology solutions that solve real business problems.
+                  </p>
+                  <p>
+                    We help startups, small and medium-sized businesses, and enterprise <strong>transform ideas into practical digital solutions</strong>. From custom web and mobile applications to powerful platforms, AI systems, and business automation, we develop software that simplifies operations, improves efficiency, and supports business growth.
+                  </p>
+                  <p>
+                    <strong>With over 10+ years of industry experience</strong> and a team of 50+ passionate <strong>professionals</strong>, we turn ideas into scalable, reliable, and future-ready software solutions.
+                  </p>
+                  <p>
+                    Our approach combines technical expertise with a strong understanding of business processes to deliver applications that are practical, impactful, and built to grow with you.
+                  </p>
+                  <p>
+                    We at I-BacusTech believe in understanding each client's business before writing a single line of code. By working closely with our clients, analyzing workflows, and identifying challenges, we create solutions that deliver measurable results.
+                  </p>
+                  <p>
+                    Whether you need a custom enterprise application, an AI-driven solution, a cloud platform, a business intelligence dashboard, or a progressive web app — we're here to help you innovate, scale, and stay ahead in today's fast-moving business world.
+                  </p>
+                </>
+              )}
+              
+              <h3 className="text-[15px] font-bold text-[#1d3557] mt-1.5 mb-1">{settings.productsMicroAppsRightHeading || 'Why Business Choose I-BacusTech:'}</h3>
+              <ul className="grid sm:grid-cols-1 gap-1.5 mb-1 ml-1">
+                {parseJsonSafe(settings.productsMicroAppsRightBullets, [
+                  '10+ years of technology and digital transformation experience',
+                  'Custom solutions tailored to your business',
+                  'Expertise in AI, Web, Mobile, ERP, Cloud, and Data Analytics',
+                  'Agile development with transparent communication',
+                  'Secure, scalable, and future-ready applications',
+                  'Dedicated support beyond project delivery'
+                ]).map((item: string, idx: number) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <div className="w-[4px] h-[4px] rounded-full bg-slate-400 shrink-0 mt-2"></div>
+                    <span className="text-[13px] font-semibold text-slate-700 leading-snug">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <p className="mt-1 whitespace-pre-wrap">
+                {settings.productsMicroAppsRightTextBottom || 'Our mission is simple: to empower businesses with innovative technology solutions that improve productivity, create customer success, and enable sustainable growth.'}
+              </p>
+            </div>
+            
           </div>
         </div>
       </section>
@@ -561,7 +688,7 @@ export function AllProductsPage() {
                         </div>
 
                         {/* Description */}
-                        <p className="text-xs text-slate-600 leading-relaxed mb-3 line-clamp-3 overflow-hidden break-words">
+                        <p className="text-xs text-slate-600 leading-relaxed mb-3 line-clamp-3 overflow-hidden">
                           {stripHtml(project.description)}
                         </p>
                       </div>

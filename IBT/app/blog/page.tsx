@@ -8,7 +8,7 @@ import { formatCategoryName } from '@/src/utils/category'
 export const dynamic = 'force-dynamic'
 
 const resolveApiOrigin = (value: string | undefined) => {
-  const fallback = 'http://localhost:5000'
+  const fallback = 'http://localhost:5001'
   if (!value?.trim()) return fallback
   const trimmed = value.trim()
   const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `http://${trimmed}`

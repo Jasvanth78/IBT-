@@ -24,7 +24,7 @@ export function resolveImageUrl(url: string | null | undefined): string {
   }
   
   // 4. Combine with the current API_URL (production or local)
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
   const base = baseUrl.replace(/\/$/, '');
   return `${base}${cleanPath}`;
 }

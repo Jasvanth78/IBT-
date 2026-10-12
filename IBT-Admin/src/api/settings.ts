@@ -218,6 +218,24 @@ export async function saveSettings({ values, currentSettings }: SaveSettingsInpu
     ...(values.servicesWhatFeatures !== undefined ? [{ key: SETTINGS_KEYS.SERVICES_WHAT_FEATURES, value: values.servicesWhatFeatures }] : []),
     ...(values.servicesWhatImages !== undefined ? [{ key: SETTINGS_KEYS.SERVICES_WHAT_IMAGES, value: values.servicesWhatImages }] : []),
 
+    // ── Products Page ────────────────────────────────────────────
+    ...(values.productsHeroTitle !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_HERO_TITLE, value: trimStr(values.productsHeroTitle) }] : []),
+    ...(values.productsHeroHighlight !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_HERO_HIGHLIGHT, value: trimStr(values.productsHeroHighlight) }] : []),
+    ...(values.productsHeroDescription !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_HERO_DESCRIPTION, value: trimStr(values.productsHeroDescription) }] : []),
+    ...(values.productsHeroImageUrl !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_HERO_IMAGE_URL, value: trimStr(values.productsHeroImageUrl) }] : []),
+    ...(values.productsHeroProjectsDelivered !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_HERO_PROJECTS_DELIVERED, value: trimStr(values.productsHeroProjectsDelivered) }] : []),
+    ...(values.productsHeroClientSatisfaction !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_HERO_CLIENT_SATISFACTION, value: trimStr(values.productsHeroClientSatisfaction) }] : []),
+    ...(values.productsMicroAppsTitle !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_TITLE, value: trimStr(values.productsMicroAppsTitle) }] : []),
+    ...(values.productsMicroAppsSubtitle !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_SUBTITLE, value: trimStr(values.productsMicroAppsSubtitle) }] : []),
+    ...(values.productsMicroAppsLeftIntro !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_LEFT_INTRO, value: trimStr(values.productsMicroAppsLeftIntro) }] : []),
+    ...(values.productsMicroAppsLeftHeading !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_LEFT_HEADING, value: trimStr(values.productsMicroAppsLeftHeading) }] : []),
+    ...(values.productsMicroAppsLeftText !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_LEFT_TEXT, value: trimStr(values.productsMicroAppsLeftText) }] : []),
+    ...(values.productsMicroAppsLeftBullets !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_LEFT_BULLETS, value: values.productsMicroAppsLeftBullets }] : []),
+    ...(values.productsMicroAppsRightTextTop !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_RIGHT_TEXT_TOP, value: trimStr(values.productsMicroAppsRightTextTop) }] : []),
+    ...(values.productsMicroAppsRightHeading !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_RIGHT_HEADING, value: trimStr(values.productsMicroAppsRightHeading) }] : []),
+    ...(values.productsMicroAppsRightBullets !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_RIGHT_BULLETS, value: values.productsMicroAppsRightBullets }] : []),
+    ...(values.productsMicroAppsRightTextBottom !== undefined ? [{ key: SETTINGS_KEYS.PRODUCTS_MICRO_APPS_RIGHT_TEXT_BOTTOM, value: trimStr(values.productsMicroAppsRightTextBottom) }] : []),
+
     // ── Home Solutions ──────────────────────────────────────────
     ...(values.homeSolutionsTitle !== undefined ? [{ key: SETTINGS_KEYS.HOME_SOLUTIONS_TITLE, value: trimStr(values.homeSolutionsTitle) }] : []),
     ...(values.homeSolutionsBadge !== undefined ? [{ key: SETTINGS_KEYS.HOME_SOLUTIONS_BADGE, value: trimStr(values.homeSolutionsBadge) }] : []),
